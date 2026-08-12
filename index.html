@@ -1434,8 +1434,8 @@ function lsSet(key,value){ try{ localStorage.setItem('cb:'+key, value); return t
    3. In Project Settings > API, copy your Project URL and anon public key below.
    NOTE: the policies above allow anyone with the anon key to read/write —
    fine for a test/solo-artist site, but don't put real secrets in this table. */
-const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL = 'https://arcskvnzduziteeklvsn.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_9yCbdiphZKOu7kIrs0Jidw_u8JEMm3s';
 const hasSupabase = SUPABASE_URL.indexOf('YOUR_SUPABASE') !== 0 && typeof window.supabase !== 'undefined';
 const sb = hasSupabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 let apiAvailable = hasSupabase ? null : false;
@@ -1541,6 +1541,36 @@ function fileToDataUrl(file){
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
+}
+
+/* ---- Supabase Storage uploads (for video/audio/large files) ----
+   1. In Supabase, go to Storage in the left sidebar.
+   2. Click 'New bucket', name it exactly: media
+   3. Toggle 'Public bucket' ON (so uploaded files can be viewed on your site), then Create.
+   4. That's it — no extra SQL needed, uploads below will now go here automatically. */
+const STORAGE_BUCKET = 'media';
+async function uploadToBucket(file, folder){
+  if(!sb) return null;
+  try{
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+    const path = (folder||'uploads')+'/'+uid()+'-'+safeName;
+    const { error } = await sb.storage.from(STORAGE_BUCKET).upload(path, file, { upsert:false });
+    if(error) throw error;
+    const { data } = sb.storage.from(STORAGE_BUCKET).getPublicUrl(path);
+    return data && data.publicUrl ? data.publicUrl : null;
+  }catch(e){ return null; }
+}
+/* Smart upload: video/audio/large files go to Supabase Storage (fast, no size worries).
+   Small images fall back to a compressed inline data URL if Storage isn't set up yet. */
+async function uploadMedia(file, opts){
+  opts = opts || {};
+  const isImage = file.type.startsWith('image/');
+  if(sb){
+    const url = await uploadToBucket(file, opts.folder);
+    if(url) return url;
+  }
+  if(isImage) return fileToCompressedDataUrl(file, opts.maxW||900, opts.quality||0.78, opts.mimeType);
+  return fileToDataUrl(file);
 }
 
 /* ================= CONFIRM MODAL ================= */
@@ -2251,7 +2281,7 @@ document.getElementById('toPage3').addEventListener('click', async ()=>{
   const files = Array.from(document.getElementById('ordRefFile').files).slice(0,4);
   if(files.length){
     refImagesData = [];
-    for(const f of files){ try{ refImagesData.push(await fileToCompressedDataUrl(f, 700, 0.7)); }catch(e){} }
+    for(const f of files){ try{ refImagesData.push(await uploadMedia(f, {folder:'refs', maxW:700, quality:0.7})); }catch(e){} }
   }
   goPage(3);
 });
@@ -3076,8 +3106,8 @@ async function renderArtistTab(tab){
           const file = input.files[0];
           if(!file) return;
           const o = ordersCache[btn.dataset.id];
-          if(file.type.startsWith('image/')) o.deliverable = await fileToCompressedDataUrl(file, 1600, 0.9, 'image/png');
-          else o.deliverable = await fileToDataUrl(file);
+          if(file.type.startsWith('image/')) o.deliverable = await uploadMedia(file, {folder:'deliverables', maxW:1600, quality:0.9, mimeType:'image/png'});
+          else o.deliverable = await uploadMedia(file, {folder:'deliverables'});
           o.status = 'done';
           await saveOrder(o);
           await refreshSlotStatus();
@@ -3259,12 +3289,12 @@ function renderPortfolioManager(el){
     const vidFile = document.getElementById('pfVideoFile').files[0];
     const audFile = document.getElementById('pfAudioFile').files[0];
     if(!title){ toast('Give it a title first'); return; }
-    if(vidFile && vidFile.size > 4.5*1024*1024){ toast('That video is too big to save (keep it under ~4.5MB) — try a shorter clip'); return; }
+    if(!sb && vidFile && vidFile.size > 4.5*1024*1024){ toast('That video is too big to save without Supabase Storage set up (keep it under ~4.5MB) — try a shorter clip'); return; }
     const id = uid();
     const item = {id, category:cat, title, desc, image:null, video:null, audio:null, createdAt:Date.now()};
-    if(imgFile) item.image = await fileToCompressedDataUrl(imgFile, 900, 0.78);
-    if(vidFile) item.video = await fileToDataUrl(vidFile);
-    if(audFile) item.audio = await fileToDataUrl(audFile);
+    if(imgFile) item.image = await uploadMedia(imgFile, {folder:'portfolio', maxW:900, quality:0.78});
+    if(vidFile) item.video = await uploadMedia(vidFile, {folder:'portfolio'});
+    if(audFile) item.audio = await uploadMedia(audFile, {folder:'portfolio'});
     await storeSet('portfolio-item:'+id, JSON.stringify(item));
     if(!pfIndex[cat]) pfIndex[cat]=[];
     pfIndex[cat].push(id);
@@ -3358,7 +3388,7 @@ function renderSheetsManager(el){
     document.getElementById('msUploadBtn').addEventListener('click', async ()=>{
       const f = document.getElementById('msFile').files[0];
       if(!f){ toast('Choose an image first'); return; }
-      const dataUrl = await fileToCompressedDataUrl(f, 900, 0.78);
+      const dataUrl = await uploadMedia(f, {folder:'modelsheets', maxW:900, quality:0.78});
       data.modelSheets = data.modelSheets||[];
       data.modelSheets.push(dataUrl);
       await storeSet('pricesheet', JSON.stringify(data));
@@ -3457,7 +3487,7 @@ async function renderGalleryManager(el){
     const visible = document.getElementById('galleryVisibleChk').checked;
     if(!name){ toast('Enter a name for the option'); return; }
     let image = null;
-    if(file) image = await fileToCompressedDataUrl(file, 400, 0.7);
+    if(file) image = await uploadMedia(file, {folder:'gallery', maxW:400, quality:0.7});
     if(!siteData.gallery) siteData.gallery = {};
     if(!siteData.gallery[cat]) siteData.gallery[cat] = [];
     siteData.gallery[cat].push({id:uid(), name, price: price || null, icon, image, popular, recommended, visible});
@@ -3641,7 +3671,7 @@ function renderSettingsManager(el){
   document.getElementById('addAboutPhotoBtn').addEventListener('click', async ()=>{
     const f = document.getElementById('aboutPhotoFile').files[0];
     if(!f){ toast('Choose a photo first'); return; }
-    const dataUrl = await fileToCompressedDataUrl(f, 700, 0.75);
+    const dataUrl = await uploadMedia(f, {folder:'about', maxW:700, quality:0.75});
     about.images = about.images||[];
     if(about.images.length>=4){ toast('Remove one first — max 4 photos'); return; }
     about.images.push(dataUrl);
@@ -3701,7 +3731,7 @@ function renderSettingsManager(el){
     const f = document.getElementById('musicFile').files[0];
     const url = document.getElementById('musicUrl').value.trim();
     let track = null;
-    if(f) track = {name:f.name, src: await fileToDataUrl(f)};
+    if(f) track = {name:f.name, src: await uploadMedia(f, {folder:'music'})};
     else if(url) track = {name:url.split('/').pop(), src:url};
     if(!track){ toast('Add a file or URL first'); return; }
     await storeSet('music-track', JSON.stringify(track));
