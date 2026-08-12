@@ -1,0 +1,3877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cherry Bakery Commissions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,600;1,9..144,700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+:root{
+  --brown-950:#160b07;
+  --brown-900:#241209;
+  --brown-800:#33190d;
+  --brown-700:#452110;
+  --cherry:#a8223a;
+  --cherry-bright:#d9394f;
+  --gold:#c99a4a;
+  --gold-light:#e0bd7d;
+  --cream:#f3e3c9;
+  --cream-dim:#d8c4a4;
+  --pink-icing:#eeb0b9;
+  --shadow:0 10px 30px rgba(0,0,0,.45);
+  --radius:16px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(circle at 20% 0%, #2a150a 0%, transparent 45%),
+    radial-gradient(circle at 90% 20%, #351a0e 0%, transparent 40%),
+    var(--brown-950);
+  color:var(--cream);
+  font-family:'Quicksand',sans-serif;
+  min-height:100vh;
+}
+h1,h2,h3,.display{font-family:'Fraunces',serif;}
+a{color:var(--gold-light);}
+button{font-family:'Quicksand',sans-serif;cursor:pointer;}
+::-webkit-scrollbar{width:10px;}
+::-webkit-scrollbar-track{background:var(--brown-900);}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:8px;}
+
+/* ---------- header ---------- */
+header{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(180deg,var(--brown-950) 80%,transparent);
+  border-bottom:1px solid rgba(201,154,74,.35);
+  backdrop-filter:blur(6px);
+}
+.header-inner{
+  max-width:1180px;margin:0 auto;padding:14px 22px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+.logo{
+  display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;
+  font-weight:700;font-size:22px;color:var(--cream);letter-spacing:.3px;
+}
+.logo .icon{font-size:26px;}
+nav{display:flex;gap:4px;flex-wrap:wrap;align-items:center;}
+.nav-btn{
+  background:none;border:1px solid transparent;color:var(--cream-dim);
+  padding:8px 14px;border-radius:999px;font-size:14px;font-weight:600;
+  transition:.15s;
+}
+.nav-btn:hover{background:rgba(201,154,74,.12);color:var(--cream);}
+.nav-btn.active{background:var(--cherry);color:var(--cream);border-color:var(--cherry-bright);}
+.nav-btn.gold{border-color:var(--gold);color:var(--gold-light);}
+.nav-btn.gold:hover{background:rgba(201,154,74,.18);}
+.pill-sign{
+  font-size:12px;font-weight:700;padding:5px 12px;border-radius:999px;
+  border:1px solid var(--gold);color:var(--gold-light);letter-spacing:.5px;
+}
+.pill-sign.closed{border-color:var(--cherry-bright);color:#ff9aa8;}
+
+/* ---------- layout shell ---------- */
+main{max-width:1180px;margin:0 auto;padding:34px 22px 120px;}
+.view{display:none;}
+.view.active{display:block;animation:fadeIn .35s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* ---------- hero / window showcase ---------- */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:26px 0 50px;}
+@media(max-width:860px){.hero{grid-template-columns:1fr;}}
+.hero h1{font-size:44px;line-height:1.08;margin:0 0 14px;color:var(--cream);}
+.hero h1 em{color:var(--cherry-bright);font-style:italic;}
+.hero p{color:var(--cream-dim);font-size:16px;line-height:1.6;max-width:46ch;margin:0 0 22px;}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;}
+.btn{
+  border:none;padding:13px 22px;border-radius:12px;font-weight:700;font-size:14.5px;
+  transition:transform .12s, box-shadow .12s;
+}
+.btn:active{transform:scale(.97);}
+.btn-cherry{background:var(--cherry);color:#fff0ee;box-shadow:0 6px 18px rgba(168,34,58,.4);}
+.btn-cherry:hover{background:var(--cherry-bright);}
+.btn-gold{background:transparent;border:1.5px solid var(--gold);color:var(--gold-light);}
+.btn-gold:hover{background:rgba(201,154,74,.14);}
+.btn-outline{background:transparent;border:1.5px solid var(--cream-dim);color:var(--cream-dim);}
+.btn-outline:hover{border-color:var(--cream);color:var(--cream);}
+.btn-small{padding:8px 14px;font-size:13px;border-radius:9px;}
+.btn-danger{background:transparent;border:1.5px solid var(--cherry-bright);color:#ff9aa8;}
+.btn-danger:hover{background:rgba(168,34,58,.15);}
+.btn-addon{background:rgba(201,154,74,.12);border:1.5px solid rgba(201,154,74,.3);color:var(--gold-light);}
+.btn-addon:hover{background:rgba(201,154,74,.25);}
+.btn-addon.selected{background:var(--cherry);border-color:var(--cherry-bright);color:#fff;}
+
+/* ---------- hero / window showcase ---------- */
+.window-frame{
+  background:linear-gradient(180deg,var(--brown-700),var(--brown-800));
+  border:10px solid var(--gold);
+  border-radius:14px;padding:14px;box-shadow:var(--shadow);
+  position:relative;
+}
+.window-frame::before{
+  content:"";position:absolute;inset:8px;border:1px solid rgba(255,255,255,.08);border-radius:8px;pointer-events:none;
+}
+.window-glass{
+  background:linear-gradient(160deg, rgba(255,255,255,.09), rgba(255,255,255,.01) 40%, rgba(255,255,255,.06) 100%);
+  border-radius:8px;min-height:300px;padding:18px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.window-shelf{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+}
+.window-item{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;}
+.window-item .plate-mini{
+  width:88%;height:88%;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff9ec,#e8d3a8 65%,#c9a768 100%);
+  border:4px solid var(--gold);
+  box-shadow:inset 0 0 0 4px rgba(255,255,255,.3), 0 8px 16px rgba(0,0,0,.4);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.window-item .plate-mini img,.window-item .plate-mini video{width:78%;height:78%;object-fit:cover;border-radius:50%;display:block;}
+.window-item .plate-mini .ph{font-size:20px;}
+.window-caption{
+  font-size:12px;text-align:center;color:var(--gold-light);letter-spacing:1px;
+  text-transform:uppercase;margin-top:2px;
+}
+.window-empty{
+  text-align:center;color:var(--cream-dim);font-size:14px;padding:40px 10px;
+}
+
+/* ---------- section grids ---------- */
+.section-head{margin-bottom:24px;}
+.section-head h2{font-size:30px;margin:0 0 6px;color:var(--cream);}
+.section-head p{color:var(--cream-dim);margin:0;font-size:15px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;}
+.plate-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:26px;}
+.plate-card{display:flex;flex-direction:column;align-items:center;text-align:center;padding:6px;}
+.plate{
+  width:180px;height:180px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff9ec,#e8d3a8 65%,#c9a768 100%);
+  border:6px solid var(--gold);
+  box-shadow:inset 0 0 0 6px rgba(255,255,255,.35), 0 12px 22px rgba(0,0,0,.45);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:14px;
+  transition:transform .15s;
+}
+.plate-card:hover .plate{transform:translateY(-4px) scale(1.02);}
+.plate img,.plate video{width:80%;height:80%;object-fit:cover;border-radius:50%;box-shadow:0 4px 12px rgba(0,0,0,.35);}
+.plate .ph{font-size:36px;}
+.plate-wrap{position:relative;display:inline-block;margin-bottom:14px;}
+.plate-wrap .plate{margin-bottom:0;}
+.wishlist-heart-btn{
+  position:absolute;top:0;right:4px;
+  background:rgba(20,10,5,.55);
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:50%;
+  width:30px;height:30px;
+  font-size:15px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:transform .15s, background .15s;
+}
+.wishlist-heart-btn:hover{transform:scale(1.12);background:rgba(20,10,5,.75);}
+.wishlist-heart-btn.active{background:rgba(217,57,79,.25);border-color:var(--cherry-bright);}
+
+/* wishlist strip on client dashboard */
+.wishlist-strip-wrap{
+  background:rgba(0,0,0,.18);border:1px solid rgba(201,154,74,.3);border-radius:16px;
+  padding:14px 16px;
+}
+.wishlist-strip-head{font-family:'Fraunces',serif;font-weight:700;font-size:15px;color:var(--cream);margin-bottom:10px;}
+.wishlist-strip{display:flex;gap:14px;overflow-x:auto;padding-bottom:4px;}
+.wishlist-item{flex:0 0 120px;text-align:center;}
+.wishlist-thumb{position:relative;width:120px;height:120px;border-radius:12px;overflow:hidden;background:var(--brown-950);margin-bottom:6px;}
+.wishlist-thumb img,.wishlist-thumb video{width:100%;height:100%;object-fit:cover;}
+.wishlist-thumb .ph{font-size:28px;display:flex;align-items:center;justify-content:center;height:100%;}
+.wishlist-thumb .wishlist-heart-btn{top:4px;right:4px;width:26px;height:26px;font-size:13px;}
+.wishlist-title{font-size:11px;color:var(--cream-dim);margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* loyalty checkout card */
+.loyalty-card-inner{
+  background:repeating-linear-gradient(0deg, #e9d8b4, #e9d8b4 2px, #e2cda3 2px, #e2cda3 26px);
+  border:2px dashed #a8823f;
+  border-radius:10px;
+  padding:16px 18px;
+  color:#3a2a12;
+  box-shadow:0 8px 20px rgba(0,0,0,.3);
+}
+.loyalty-card-head{display:flex;flex-direction:column;gap:2px;margin-bottom:10px;}
+.loyalty-title{font-family:'Fraunces',serif;font-weight:800;font-size:16px;}
+.loyalty-sub{font-size:11.5px;opacity:.75;}
+.loyalty-slots{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;max-width:280px;margin-bottom:10px;}
+.loyalty-slot{font-size:22px;text-align:center;color:#a8823f;line-height:1;}
+.loyalty-slot.filled{color:var(--cherry);}
+.loyalty-slot.reward{font-weight:700;}
+.loyalty-footer{display:flex;flex-direction:column;gap:4px;font-size:12.5px;}
+.loyalty-earned{color:var(--cherry);font-weight:700;}
+.loyalty-total{opacity:.75;}
+.plate-card h3{margin:0 0 6px;font-size:16px;color:var(--cream);}
+.plate-card p{margin:0;font-size:12.5px;color:var(--cream-dim);line-height:1.5;max-width:220px;}
+.empty-state{
+  text-align:center;padding:50px 20px;color:var(--cream-dim);border:1px dashed rgba(201,154,74,.35);border-radius:var(--radius);
+}
+
+/* ---------- about ---------- */
+.about-wrap{display:grid;grid-template-columns:1fr 1.3fr;gap:36px;}
+@media(max-width:800px){.about-wrap{grid-template-columns:1fr;}}
+.about-photos{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.about-photos img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;border:1px solid rgba(201,154,74,.3);}
+.about-bio{color:var(--cream-dim);line-height:1.7;font-size:15px;white-space:pre-wrap;}
+.socials-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+.social-chip{
+  border:1px solid var(--gold);color:var(--gold-light);padding:8px 16px;border-radius:999px;
+  font-size:13px;font-weight:600;text-decoration:none;
+}
+.social-chip:hover{background:rgba(201,154,74,.14);}
+
+/* ---------- modal ---------- */
+.overlay{
+  position:fixed;inset:0;background:rgba(10,4,2,.72);z-index:200;
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.overlay.active{display:flex;}
+.modal{
+  background:linear-gradient(180deg,var(--brown-900),var(--brown-950));
+  border:1px solid rgba(201,154,74,.4);border-radius:20px;box-shadow:var(--shadow);
+  max-width:480px;width:100%;padding:28px;max-height:88vh;overflow-y:auto;position:relative;
+}
+.modal.wide{max-width:900px;}
+.modal-close{
+  position:absolute;top:14px;right:16px;background:none;border:none;color:var(--cream-dim);
+  font-size:22px;line-height:1;
+}
+.modal-close:hover{color:var(--cream);}
+.modal h2{margin:0 0 4px;font-size:22px;}
+.modal .sub{color:var(--cream-dim);font-size:13px;margin:0 0 20px;}
+.tabbar{display:flex;gap:8px;margin-bottom:20px;}
+.tabbar button{
+  flex:1;background:var(--brown-800);border:1px solid transparent;color:var(--cream-dim);
+  padding:10px;border-radius:10px;font-weight:700;font-size:13px;
+}
+.tabbar button.active{background:var(--cherry);color:#fff;border-color:var(--cherry-bright);}
+
+label{display:block;font-size:12.5px;color:var(--gold-light);font-weight:700;margin:14px 0 6px;letter-spacing:.3px;text-transform:uppercase;}
+label:first-child{margin-top:0;}
+label .required{color:var(--cherry-bright);margin-left:2px;}
+input[type=text],input[type=email],input[type=password],input[type=url],textarea,select{
+  width:100%;background:var(--brown-950);border:1px solid rgba(201,154,74,.35);color:var(--cream);
+  padding:11px 12px;border-radius:10px;font-size:14px;font-family:'Quicksand',sans-serif;
+}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--gold);}
+textarea{min-height:90px;resize:vertical;}
+.field-hint{font-size:11.5px;color:var(--cream-dim);margin-top:4px;}
+.form-msg{font-size:13px;padding:10px 12px;border-radius:8px;margin-top:12px;}
+.form-msg.err{background:rgba(168,34,58,.2);color:#ff9aa8;border:1px solid rgba(168,34,58,.5);}
+.form-msg.ok{background:rgba(80,140,90,.18);color:#a8e6b0;border:1px solid rgba(80,140,90,.5);}
+
+/* ---------- cake book commission form ---------- */
+.cakebook{display:flex;position:relative;}
+.book-spine{
+  width:16px;flex-shrink:0;border-radius:8px 0 0 8px;
+  background:linear-gradient(180deg,var(--gold),var(--gold-light) 50%,var(--gold));
+  box-shadow:inset -2px 0 4px rgba(0,0,0,.3);position:relative;
+}
+.book-spine::before{
+  content:"";position:absolute;top:16px;bottom:16px;left:50%;width:2px;
+  background:repeating-linear-gradient(180deg,rgba(0,0,0,.3) 0 6px, transparent 6px 14px);
+  transform:translateX(-50%);
+}
+.cakebook-paper{
+  flex:1;min-width:0;background:linear-gradient(180deg,#fbf1dd,#f0ddb8);color:#3b2015;
+  border-radius:0 12px 12px 0;padding:24px 26px 40px;position:relative;
+  box-shadow:inset 6px 0 12px rgba(0,0,0,.1), 0 12px 26px rgba(0,0,0,.4);
+  min-height:340px;
+}
+.cakebook-paper label{color:var(--cherry);}
+.cakebook-paper input[type=text],.cakebook-paper input[type=email],.cakebook-paper textarea,.cakebook-paper select{
+  background:#fffaf0;border:1px solid rgba(168,34,58,.3);color:#3b2015;
+}
+.cakebook-paper .field-hint{color:#8a6a4a;}
+.cakebook-paper .checkline{color:#5c4531;}
+.cakebook-paper .btn-outline{border-color:var(--cherry);color:var(--cherry);}
+.cakebook-paper .card{background:#fffaf0;border:1px solid rgba(168,34,58,.2);color:#3b2015;}
+.cakebook-paper .card p{color:#3b2015;}
+.tos-box{
+  background:#fffaf0;border:1px solid rgba(168,34,58,.25);border-radius:10px;padding:14px 16px;
+  font-size:12.5px;line-height:1.75;color:#4a3320;max-height:220px;overflow-y:auto;white-space:pre-wrap;
+}
+.book-pagenum{position:absolute;bottom:14px;right:22px;font-size:11px;color:#8a6a4a;font-weight:700;letter-spacing:.4px;}
+.book-progress{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;}
+.book-progress span{flex:1;height:5px;border-radius:4px;background:rgba(168,34,58,.15);min-width:40px;}
+.book-progress span.done{background:var(--cherry);}
+.book-progress .step-label{font-size:10px;color:#8a6a4a;text-align:center;margin-top:2px;display:block;font-weight:600;letter-spacing:.3px;text-transform:uppercase;}
+.book-page{display:none;}
+.book-page.active{display:block;}
+.book-page.slide-fwd{animation:slideFwd .32s ease;}
+.book-page.slide-back{animation:slideBack .32s ease;}
+@keyframes slideFwd{from{opacity:0;transform:translateX(34px);}to{opacity:1;transform:translateX(0);}}
+@keyframes slideBack{from{opacity:0;transform:translateX(-34px);}to{opacity:1;transform:translateX(0);}}
+.book-nav{display:flex;justify-content:space-between;margin-top:22px;}
+.cashtag-box{
+  background:#fffaf0;border:1px dashed var(--cherry);border-radius:12px;padding:14px;margin-top:6px;
+}
+.cashtag-box .amt{font-family:'Fraunces',serif;font-size:20px;color:var(--cherry);}
+.checkline{display:flex;align-items:flex-start;gap:8px;margin-top:14px;font-size:12.5px;color:var(--cream-dim);}
+.checkline input{width:auto;margin-top:2px;}
+@media(max-width:600px){.book-spine{display:none;}.cakebook-paper{border-radius:12px;}}
+
+/* ---------- gallery picker ---------- */
+.gallery-picker{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin:12px 0;}
+.gallery-option{
+  background:#fffaf0;border:2px solid rgba(168,34,58,.2);border-radius:14px;padding:12px;text-align:center;
+  cursor:pointer;transition:all .25s ease;position:relative;
+}
+.gallery-option:hover{transform:translateY(-4px) scale(1.02);border-color:var(--gold-light);box-shadow:0 8px 20px rgba(168,34,58,.15);}
+.gallery-option.selected{border-color:var(--cherry);background:#fff5ee;box-shadow:0 0 0 3px var(--cherry-bright), 0 8px 20px rgba(168,34,58,.2);}
+.gallery-option .gallery-img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;background:var(--brown-100);}
+.gallery-option .gallery-img.ph{display:flex;align-items:center;justify-content:center;font-size:48px;background:#f5ede0;}
+.gallery-option .gallery-name{font-weight:700;color:#3b2015;margin-top:6px;font-size:13px;}
+.gallery-option .gallery-price{color:var(--cherry);font-size:13px;font-weight:700;}
+.gallery-option .gallery-desc{font-size:11px;color:#8a6a4a;margin-top:2px;}
+.gallery-option .selected-badge{position:absolute;top:-8px;right:-8px;background:var(--cherry);color:#fff;border-radius:50%;width:28px;height:28px;display:none;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 8px rgba(168,34,58,.4);}
+.gallery-option.selected .selected-badge{display:flex;}
+.gallery-option .popular-badge{position:absolute;top:-6px;left:-6px;background:var(--gold);color:#3b2015;font-size:9px;font-weight:800;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.5px;}
+.gallery-option .recommended-badge{position:absolute;top:-6px;left:-6px;background:var(--cherry-bright);color:#fff;font-size:9px;font-weight:800;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.5px;}
+.gallery-option .soldout-badge{position:absolute;top:-6px;right:-6px;background:#5c4531;color:#fff;font-size:9px;font-weight:800;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.5px;}
+.gallery-option.sold-out{cursor:not-allowed;opacity:.55;filter:grayscale(.6);}
+.gallery-option.sold-out:hover{transform:none;box-shadow:none;border-color:rgba(168,34,58,.2);}
+.gallery-option.visibility-hidden{opacity:.4;filter:grayscale(1);}
+.gallery-option.visibility-hidden::after{content:"🙈";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:32px;}
+
+/* ---------- addons ---------- */
+.addon-grid{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 16px;}
+.addon-chip{
+  background:#fffaf0;border:2px solid rgba(168,34,58,.15);border-radius:999px;
+  padding:6px 14px;font-size:12px;font-weight:600;color:#3b2015;cursor:pointer;
+  transition:all .15s;display:flex;align-items:center;gap:6px;
+}
+.addon-chip:hover{transform:translateY(-2px);border-color:var(--gold-light);}
+.addon-chip.selected{background:var(--cherry);border-color:var(--cherry-bright);color:#fff;}
+.addon-chip .addon-price{font-weight:400;opacity:.8;}
+.addon-chip .addon-check{display:none;font-size:12px;}
+.addon-chip.selected .addon-check{display:inline;}
+
+/* ---------- price summary ---------- */
+.price-summary{
+  background:#fffaf0;border:2px solid var(--gold);border-radius:12px;padding:14px 18px;margin:8px 0 14px;
+}
+.price-summary .price-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;color:#3b2015;}
+.price-summary .price-row.total{font-weight:700;font-size:16px;border-top:2px solid rgba(168,34,58,.2);padding-top:8px;margin-top:4px;color:var(--cherry);}
+.price-summary .price-row .label{color:#8a6a4a;}
+.price-summary .price-row .value{font-weight:600;}
+
+/* ---------- order summary sidebar ---------- */
+.order-summary-sidebar{
+  position:sticky;top:100px;background:var(--brown-900);border:1px solid rgba(201,154,74,.25);border-radius:var(--radius);padding:16px 18px;margin-bottom:20px;
+}
+.order-summary-sidebar h4{margin:0 0 10px;color:var(--gold-light);font-family:'Fraunces',serif;font-size:16px;}
+.order-summary-sidebar .summary-item{font-size:12px;color:var(--cream-dim);padding:4px 0;border-bottom:1px solid rgba(201,154,74,.1);}
+.order-summary-sidebar .summary-item:last-child{border-bottom:none;}
+.order-summary-sidebar .summary-total{font-family:'Fraunces',serif;font-size:18px;color:var(--gold-light);margin-top:10px;padding-top:10px;border-top:2px solid rgba(201,154,74,.2);}
+
+/* ---------- timeline ---------- */
+.timeline-steps{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap;}
+.timeline-step{flex:1;min-width:80px;text-align:center;padding:8px 4px;border-radius:8px;background:var(--brown-800);border:1px solid rgba(201,154,74,.15);}
+.timeline-step .step-icon{font-size:20px;display:block;}
+.timeline-step .step-label{font-size:10px;color:var(--cream-dim);display:block;margin-top:2px;}
+.timeline-step.active{background:var(--cherry);border-color:var(--cherry-bright);}
+.timeline-step.active .step-label{color:#fff;}
+.timeline-step.done{background:rgba(80,140,90,.2);border-color:rgba(80,140,90,.3);}
+.timeline-step.done .step-label{color:#a8e6b0;}
+
+/* ---------- dashboards ---------- */
+.dash-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px;border-bottom:1px solid rgba(201,154,74,.25);padding-bottom:12px;}
+.dash-tab{
+  background:none;border:1px solid rgba(201,154,74,.3);color:var(--cream-dim);
+  padding:8px 15px;border-radius:999px;font-size:13px;font-weight:700;
+}
+.dash-tab.active{background:var(--cherry);color:#fff;border-color:var(--cherry-bright);}
+.card{
+  background:var(--brown-900);border:1px solid rgba(201,154,74,.25);border-radius:var(--radius);
+  padding:20px 22px;margin-bottom:18px;
+}
+.stats-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;}
+.stat-tile{flex:1;min-width:130px;background:var(--brown-900);border:1px solid rgba(201,154,74,.25);border-radius:12px;padding:14px 16px;text-align:center;}
+.stat-tile .num{font-family:'Fraunces',serif;font-size:28px;color:var(--gold-light);}
+.stat-tile .lbl{font-size:10.5px;color:var(--cream-dim);text-transform:uppercase;letter-spacing:.4px;margin-top:4px;}
+.order-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
+.order-row .meta h4{margin:0 0 8px;font-size:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;line-height:1.4;}
+.order-row .meta p{margin:0;font-size:12.5px;color:var(--cream-dim);line-height:1.6;}
+.status-badge{font-size:11px;font-weight:800;padding:5px 12px;border-radius:999px;letter-spacing:.4px;text-transform:uppercase;}
+.status-received{background:rgba(201,154,74,.18);color:var(--gold-light);}
+.status-progress{background:rgba(217,57,79,.2);color:#ff9aa8;}
+.status-done{background:rgba(80,140,90,.22);color:#a8e6b0;}
+.status-denied{background:rgba(168,34,58,.3);color:#ff9aa8;border:1px solid rgba(168,34,58,.4);}
+.status-cancelled{background:rgba(100,100,100,.2);color:#aaa;border:1px solid rgba(100,100,100,.3);}
+.order-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px;}
+.mini-status-note.denied{color:#ff9aa8;}
+.mini-status-note.cancelled{color:#aaa;}
+
+/* ---------- bookmark-style book receipt ---------- */
+.receipt-card{
+  position:relative;
+  display:flex;
+  align-items:flex-start;
+  gap:0;
+  background:transparent;
+  border:none;
+  box-shadow:none;
+  border-radius:0;
+  padding:0;
+  margin-bottom:20px;
+  overflow:visible;
+  --cream:#3a2015;
+  --cream-dim:#6b4a35;
+  --gold-light:#832238;
+  --gold:#8a5a2f;
+  --brown-950:#d9ab98;
+  --brown-900:#d9ab98;
+  --brown-800:#cf9c87;
+}
+
+/* ---- left: the book cover ---- */
+.receipt-card .book-cover{
+  flex:0 0 190px;
+  width:190px;
+  min-height:250px;
+  position:relative;
+  background:linear-gradient(150deg, #47270f, #200f08);
+  border-radius:22px;
+  padding:20px 16px 16px;
+  cursor:pointer;
+  overflow:hidden;
+  box-shadow:0 10px 26px rgba(0,0,0,.4);
+  transition:transform .18s ease, box-shadow .18s ease;
+  user-select:none;
+}
+.receipt-card .book-cover:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(0,0,0,.45);}
+.receipt-card .book-cover:active{transform:translateY(0);}
+
+.receipt-card .book-cover-title{
+  color:#fbeee1;
+  font-family:'Fraunces',serif;
+  font-weight:800;
+  font-size:19px;
+  line-height:1.25;
+  margin:0 0 4px 82px;
+}
+.receipt-card .book-cover-sub{
+  color:rgba(251,238,225,.55);
+  font-size:10.5px;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  margin:0 0 0 82px;
+}
+.receipt-card .book-cover .cover-arrow{
+  position:absolute;
+  bottom:14px;right:16px;
+  color:rgba(251,238,225,.55);
+  font-size:12px;
+  transition:transform .3s ease;
+}
+.receipt-card.expanded .book-cover .cover-arrow{transform:rotate(90deg);}
+
+/* bookmark ribbon + heart tail, tucked in the top-left of the cover */
+.receipt-card .book-ribbon-wrap{
+  position:absolute;
+  top:0;left:16px;
+  display:flex;flex-direction:column;align-items:center;
+}
+.receipt-card .book-ribbon{
+  width:52px;
+  min-height:150px;
+  background:#f6ceba;
+  border-radius:0 0 3px 3px;
+  box-shadow:0 6px 14px rgba(0,0,0,.25);
+  display:flex;align-items:center;justify-content:center;
+  padding:14px 0 8px;
+}
+.receipt-card .book-ribbon span{
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+  font-family:'Fraunces',serif;
+  font-weight:700;
+  font-size:11.5px;
+  letter-spacing:1px;
+  color:#5a2f22;
+  white-space:nowrap;
+}
+.receipt-card .book-heart{
+  width:30px;height:30px;
+  background:#f6ceba;
+  transform:rotate(-45deg);
+  margin:-1px auto 0;
+  position:relative;
+}
+.receipt-card .book-heart::before,.receipt-card .book-heart::after{
+  content:"";
+  position:absolute;
+  width:30px;height:30px;
+  border-radius:50%;
+  background:#f6ceba;
+}
+.receipt-card .book-heart::before{top:-15px;left:0;}
+.receipt-card .book-heart::after{left:15px;top:0;}
+
+/* status tint on the ribbon */
+.receipt-card .book-ribbon.bm-progress,.receipt-card .book-ribbon.bm-progress + .book-heart,
+.receipt-card .book-ribbon.bm-progress + .book-heart::before,.receipt-card .book-ribbon.bm-progress + .book-heart::after{background:#f0b8ae;}
+.receipt-card .book-ribbon.bm-done,.receipt-card .book-ribbon.bm-done + .book-heart,
+.receipt-card .book-ribbon.bm-done + .book-heart::before,.receipt-card .book-ribbon.bm-done + .book-heart::after{background:#bcd9b6;}
+.receipt-card .book-ribbon.bm-denied,.receipt-card .book-ribbon.bm-cancelled,
+.receipt-card .book-ribbon.bm-denied + .book-heart,.receipt-card .book-ribbon.bm-cancelled + .book-heart,
+.receipt-card .book-ribbon.bm-denied + .book-heart::before,.receipt-card .book-ribbon.bm-denied + .book-heart::after,
+.receipt-card .book-ribbon.bm-cancelled + .book-heart::before,.receipt-card .book-ribbon.bm-cancelled + .book-heart::after{background:#d8c9c0;}
+
+/* ---- right: the open page / order details ---- */
+.receipt-card .book-body{
+  display:none;
+  flex:1 1 auto;
+  min-width:0;
+  background:#d9ab98;
+  border-radius:22px;
+  padding:20px 24px 22px;
+  margin-left:16px;
+}
+.receipt-card.expanded .book-body{
+  display:block;
+  animation:bookOpen .35s ease;
+}
+@keyframes bookOpen{
+  0%{opacity:0;transform:translateX(-14px);}
+  100%{opacity:1;transform:translateX(0);}
+}
+.receipt-card .book-body .page-content{display:block;}
+
+.receipt-card .book-body .order-row .meta h4{color:#3a2015;}
+.receipt-card .book-body .order-row .meta p{color:#6b4a35;}
+.receipt-card .book-body .status-received{background:rgba(255,255,255,.35);color:#7a4c1f;}
+.receipt-card .book-body .status-progress{background:rgba(131,34,56,.14);color:#832238;}
+.receipt-card .book-body .status-done{background:rgba(45,110,60,.18);color:#255c33;}
+.receipt-card .book-body .status-denied{background:rgba(131,34,56,.18);color:#832238;border-color:rgba(131,34,56,.3);}
+.receipt-card .book-body .status-cancelled{background:rgba(90,70,55,.16);color:#5a4637;border-color:rgba(90,70,55,.25);}
+.receipt-card .book-body .btn-outline{border-color:#832238;color:#832238;}
+.receipt-card .book-body .btn-danger{border-color:#832238;color:#832238;}
+.receipt-card .book-body .timeline-step{background:rgba(255,255,255,.3);}
+.receipt-card .book-body .timeline-step.done{background:rgba(45,110,60,.2);border-color:rgba(45,110,60,.3);}
+.receipt-card .book-body .timeline-step.done .step-label{color:#255c33;}
+.receipt-card .book-body .mini-status-note.denied,.receipt-card .book-body .mini-status-note.cancelled{color:#832238;}
+
+.receipt-card .book-hint{
+  font-family:'Fraunces',serif;
+  font-size:15px;
+  font-weight:700;
+  color:#3a2015;
+  margin:0 0 12px;
+  letter-spacing:.2px;
+}
+
+/* Order details grid inside the page */
+.receipt-card .order-details-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4px 20px;
+  margin:4px 0 10px;
+  font-size:12.5px;
+}
+.receipt-card .order-details-grid .label{
+  color:#6b4a35;
+  font-weight:600;
+}
+.receipt-card .order-details-grid .value{
+  color:#3a2015;
+}
+
+@media(max-width:640px){
+  .receipt-card{flex-direction:column;}
+  .receipt-card .book-cover{width:100%;flex:none;min-height:150px;}
+  .receipt-card.expanded .book-body{margin-left:0;margin-top:14px;}
+  .book-shelf .receipt-card{flex:1 1 100%;}
+}
+
+/* unread "new update" dot on the cover */
+.receipt-card .unread-dot{
+  position:absolute;
+  top:12px;right:14px;
+  width:11px;height:11px;
+  border-radius:50%;
+  background:var(--cherry-bright);
+  box-shadow:0 0 0 3px rgba(217,57,79,.25), 0 2px 6px rgba(0,0,0,.3);
+  animation:unreadPulse 1.8s ease-in-out infinite;
+}
+@keyframes unreadPulse{
+  0%,100%{transform:scale(1);opacity:1;}
+  50%{transform:scale(1.25);opacity:.75;}
+}
+
+/* copy order number */
+.receipt-card .copy-order-btn{
+  position:absolute;
+  bottom:14px;left:16px;
+  background:rgba(251,238,225,.12);
+  border:1px solid rgba(251,238,225,.25);
+  color:#fbeee1;
+  font-size:11px;
+  line-height:1;
+  padding:5px 7px;
+  border-radius:8px;
+  cursor:pointer;
+  opacity:.75;
+  transition:opacity .15s, background .15s;
+}
+.receipt-card .copy-order-btn:hover{opacity:1;background:rgba(251,238,225,.22);}
+
+/* progress note callout */
+.receipt-card .progress-note-box{
+  margin-top:10px;
+  background:rgba(255,255,255,.4);
+  border:1px solid rgba(131,34,56,.25);
+  border-radius:12px;
+  padding:10px 12px;
+  font-size:12.5px;
+  line-height:1.6;
+  color:#3a2015;
+}
+
+/* print a single receipt */
+@media print{
+  body.printing-receipt .no-print{display:none !important;}
+  body.printing-receipt .receipt-card:not(.print-target){display:none !important;}
+  body.printing-receipt header,
+  body.printing-receipt .dash-tabs,
+  body.printing-receipt .chat-bubble-btn,
+  body.printing-receipt .music-player{display:none !important;}
+  body.printing-receipt main{padding:0;max-width:100%;}
+  body.printing-receipt .print-target{box-shadow:none;}
+  body.printing-receipt .print-target .book-cover{box-shadow:none;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  body.printing-receipt .print-target .book-body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+
+/* bookshelf layout for client dashboard */
+.book-shelf{
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px 18px;
+  padding:22px 18px 26px;
+  border-radius:20px;
+  background:linear-gradient(180deg, #6b3f22 0%, #4a2a16 55%, #3a2110 100%);
+  box-shadow:inset 0 2px 10px rgba(0,0,0,.35), inset 0 -8px 16px rgba(0,0,0,.4);
+}
+.book-shelf .receipt-card{flex:0 0 auto;margin-bottom:0;}
+.book-shelf .receipt-card.expanded{flex:1 1 100%;}
+.book-shelf .empty-state{color:#fbeee1;background:rgba(0,0,0,.2);border-radius:14px;}
+
+/* tip jar */
+.tip-jar-grid{display:flex;gap:8px;flex-wrap:wrap;}
+.tip-btn{
+  padding:8px 16px;border-radius:20px;border:1px solid var(--gold);
+  background:transparent;color:var(--cream);cursor:pointer;font-size:13px;font-weight:600;
+  transition:background .15s,color .15s;
+}
+.tip-btn.active{background:var(--cherry);border-color:var(--cherry);color:#fff;}
+.tip-btn:hover{background:rgba(201,154,74,.2);}
+.tip-btn.active:hover{background:var(--cherry-bright);}
+
+/* bulk action toolbar */
+.bulk-toolbar{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  background:rgba(0,0,0,.18);border:1px solid rgba(201,154,74,.3);border-radius:12px;
+  padding:12px 16px;margin-bottom:16px;
+}
+.bulk-toolbar .checkline{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--cream);cursor:pointer;}
+.bulk-toolbar button:disabled{opacity:.4;cursor:not-allowed;}
+.receipt-card .page-content-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px;}
+.receipt-card .page-content-header .book-hint{margin:0;}
+.receipt-card .bulk-check{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#6b4a35;cursor:pointer;user-select:none;}
+.receipt-card .bulk-check input{cursor:pointer;}
+
+/* ---------- classic paper receipt skin (alternate theme) ---------- */
+body.receipt-theme-paper .receipt-card{
+  --cream:#3b2015;
+  --cream-dim:#8a6a4a;
+  --gold-light:#a8223a;
+  --gold:#c99a4a;
+  --brown-950:#fcf6e8;
+  --brown-900:#fcf6e8;
+  --brown-800:#f0e2c8;
+}
+body.receipt-theme-paper .receipt-card .book-cover{
+  background:linear-gradient(150deg,#5a3820,#3a2410);
+}
+body.receipt-theme-paper .receipt-card .book-ribbon,
+body.receipt-theme-paper .receipt-card .book-heart,
+body.receipt-theme-paper .receipt-card .book-heart::before,
+body.receipt-theme-paper .receipt-card .book-heart::after{
+  background:#e6c98a;
+}
+body.receipt-theme-paper .receipt-card .book-ribbon span{color:#4a2f10;}
+body.receipt-theme-paper .receipt-card .book-body{background:#fcf6e8;}
+body.receipt-theme-paper .receipt-card .progress-note-box{
+  background:rgba(168,34,58,.08);
+  border-color:rgba(168,34,58,.25);
+}
+body.receipt-theme-paper .receipt-card .order-details-grid .label{color:#8a6a4a;}
+body.receipt-theme-paper .receipt-card .order-details-grid .value{color:#3b2015;}
+body.receipt-theme-paper .receipt-card .book-body .order-row .meta p{color:#8a6a4a;}
+
+/* cake stand reveal */
+.cakestand-wrap{text-align:center;padding:20px 10px 6px;}
+.cakestand{position:relative;width:220px;height:190px;margin:0 auto 10px;}
+.cakestand .plate{
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:200px;height:26px;background:linear-gradient(180deg,var(--gold-light),var(--gold));border-radius:50%;
+  box-shadow:0 8px 18px rgba(0,0,0,.5);
+}
+.cakestand .stem{
+  position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+  width:18px;height:26px;background:var(--gold);border-radius:4px;
+}
+.cakestand .cake{
+  position:absolute;bottom:44px;left:50%;transform:translateX(-50%);
+  width:120px;height:70px;background:linear-gradient(180deg,#7a3b22,#5c2a17);
+  border-radius:10px 10px 4px 4px;box-shadow:inset 0 -6px 0 rgba(0,0,0,.15);
+}
+.cakestand .cake::after{
+  content:"🍒";position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:26px;
+}
+.cakestand .dome{
+  position:absolute;bottom:44px;left:50%;width:150px;height:150px;
+  transform:translate(-50%,0);
+  border-radius:50% 50% 4px 4px / 60% 60% 4px 4px;
+  background:linear-gradient(160deg, rgba(255,255,255,.28), rgba(255,255,255,.04));
+  border:2px solid rgba(255,255,255,.5);
+  transition:transform 1.1s cubic-bezier(.4,1.4,.4,1), opacity 1.1s;
+}
+.cakestand.revealed .dome{transform:translate(-50%,-190px) rotate(-18deg);opacity:0;}
+.cakestand-msg{font-family:'Fraunces',serif;font-size:26px;color:var(--gold-light);margin:14px 0 4px;opacity:0;transition:opacity .6s ease .9s;}
+.cakestand.revealed .cakestand-msg{opacity:1;}
+.deliverable-box{margin-top:16px;}
+.deliverable-box img{max-width:100%;border-radius:12px;border:1px solid rgba(201,154,74,.35);}
+.locked-box{
+  margin-top:16px;background:var(--brown-950);border:1px dashed var(--gold);border-radius:12px;
+  padding:16px;font-size:13px;color:var(--cream-dim);line-height:1.5;
+}
+
+/* recipe-card progress (received/in progress) */
+.recipe-steps{display:flex;justify-content:space-between;margin:16px 0 4px;position:relative;}
+.recipe-steps::before{content:"";position:absolute;top:13px;left:5%;right:5%;height:2px;background:rgba(201,154,74,.25);}
+.rstep{flex:1;text-align:center;position:relative;z-index:1;}
+.rstep .dot{width:26px;height:26px;border-radius:50%;background:var(--brown-800);border:2px solid rgba(201,154,74,.4);margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:13px;}
+.rstep.on .dot{background:var(--cherry);border-color:var(--cherry-bright);}
+.rstep span{font-size:11px;color:var(--cream-dim);}
+
+/* portfolio manager */
+.pf-upload{border:1.5px dashed var(--gold);border-radius:12px;padding:16px;text-align:center;margin-bottom:16px;}
+.pf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
+.pf-item{background:var(--brown-950);border:1px solid rgba(201,154,74,.25);border-radius:10px;overflow:hidden;}
+.pf-item img,.pf-item video,.pf-item .ph{width:100%;aspect-ratio:1/1;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:24px;}
+.pf-item .info{padding:8px 10px;}
+.pf-item .info h5{margin:0 0 3px;font-size:12.5px;}
+.pf-item .info p{margin:0 0 6px;font-size:11px;color:var(--cream-dim);}
+
+.priceline{display:flex;gap:8px;margin-bottom:8px;align-items:center;}
+.priceline input{flex:1;}
+
+/* ---------- goal jar ---------- */
+.goal-jar-card{
+  background:var(--brown-900);border:1px solid rgba(201,154,74,.3);border-radius:var(--radius);
+  padding:26px 20px;margin-top:8px;text-align:center;
+}
+.goal-jar-card h3{margin:0 0 4px;font-size:19px;color:var(--cream);}
+.goal-jar-sub{margin:0 0 20px;font-size:12.5px;color:var(--cream-dim);}
+.jar{position:relative;width:120px;margin:0 auto;}
+.jar-lid{width:70px;height:14px;background:linear-gradient(180deg,var(--gold-light),var(--gold));border-radius:6px;margin:0 auto;box-shadow:0 2px 4px rgba(0,0,0,.4);position:relative;z-index:2;}
+.jar-neck{width:52px;height:10px;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.02));margin:0 auto;border-left:2px solid rgba(201,154,74,.5);border-right:2px solid rgba(201,154,74,.5);}
+.jar-body{
+  width:120px;height:130px;margin-top:-2px;position:relative;overflow:hidden;
+  border:3px solid rgba(201,154,74,.6);border-radius:8px 8px 22px 22px;
+  background:linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.01) 60%);
+  transition:box-shadow .5s ease;
+}
+.jar-fill{
+  position:absolute;bottom:0;left:0;right:0;height:0%;
+  background:linear-gradient(180deg,var(--cherry-bright),var(--cherry));
+  border-radius:6px 6px 0 0;transition:height 1.1s cubic-bezier(.4,1.15,.4,1);
+}
+.jar-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;color:var(--cream);font-size:15px;text-shadow:0 1px 3px rgba(0,0,0,.65);z-index:3;}
+.jar-goal-text{margin-top:16px;font-size:13px;color:var(--cream-dim);}
+.jar-amt{color:var(--gold-light);font-weight:700;}
+.jar-drip{position:absolute;top:-4px;font-size:14px;opacity:0;pointer-events:none;}
+.jar.overflowing .jar-body{box-shadow:0 0 0 3px rgba(217,57,79,.35) inset, 0 0 22px rgba(201,154,74,.5);}
+.jar.overflowing .jar-drip{animation:jarDrip 2.4s ease-in infinite;}
+@keyframes jarDrip{
+  0%{opacity:0;transform:translateY(0) scale(.6);}
+  10%{opacity:1;}
+  80%{opacity:1;}
+  100%{opacity:0;transform:translateY(74px) scale(1);}
+}
+
+/* ---------- chat widget ---------- */
+.chat-bubble{
+  position:fixed;bottom:20px;right:20px;z-index:120;
+  width:58px;height:58px;border-radius:50%;background:var(--cherry);
+  display:flex;align-items:center;justify-content:center;font-size:26px;
+  box-shadow:0 8px 20px rgba(168,34,58,.5);border:none;
+}
+.chat-bubble .dot{
+  position:absolute;top:2px;right:2px;width:12px;height:12px;background:#ffd23f;border-radius:50%;
+  border:2px solid var(--brown-950);display:none;
+}
+.chat-panel{
+  position:fixed;bottom:88px;right:20px;z-index:120;width:320px;max-height:440px;
+  background:var(--brown-900);border:1px solid rgba(201,154,74,.4);border-radius:16px;
+  box-shadow:var(--shadow);display:none;flex-direction:column;overflow:hidden;
+}
+.chat-panel.active{display:flex;}
+.chat-head{padding:12px 14px;background:var(--brown-800);display:flex;justify-content:space-between;align-items:center;}
+.chat-head h4{margin:0;font-size:14px;}
+.chat-head select{width:auto;font-size:11px;padding:4px 6px;}
+.chat-body{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;min-height:160px;}
+.chat-msg{max-width:80%;padding:8px 11px;border-radius:12px;font-size:12.5px;line-height:1.4;}
+.chat-msg.me{align-self:flex-end;background:var(--cherry);color:#fff;}
+.chat-msg.them{align-self:flex-start;background:var(--brown-950);border:1px solid rgba(201,154,74,.25);}
+.chat-msg .who{font-size:9px;opacity:.7;display:block;margin-bottom:2px;text-transform:uppercase;letter-spacing:.4px;}
+.chat-input-row{display:flex;border-top:1px solid rgba(201,154,74,.25);}
+.chat-input-row input{border:none;border-radius:0;background:var(--brown-950);}
+.chat-input-row button{background:var(--cherry);color:#fff;border:none;padding:0 16px;font-weight:700;}
+.chat-empty{color:var(--cream-dim);font-size:12px;text-align:center;margin-top:20px;}
+
+/* ---------- audio player ---------- */
+.music-player{
+  position:fixed;bottom:20px;left:20px;z-index:120;
+  background:var(--brown-900);border:1px solid rgba(201,154,74,.4);border-radius:14px;
+  box-shadow:var(--shadow);padding:10px 14px;display:flex;align-items:center;gap:10px;
+  font-size:12px;max-width:250px;
+}
+.music-player .mp-play{
+  width:34px;height:34px;border-radius:50%;background:var(--cherry);border:none;color:#fff;font-size:14px;flex-shrink:0;
+}
+.music-player .mp-meta{flex:1;min-width:0;}
+.music-player .mp-track{font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.music-player input[type=range]{width:70px;accent-color:var(--cherry);}
+
+/* footer */
+footer{text-align:center;padding:30px 20px 100px;color:var(--cream-dim);font-size:13px;border-top:1px solid rgba(201,154,74,.2);margin-top:60px;}
+footer .footer-links{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:12px;}
+footer .footer-links a{color:var(--gold-light);text-decoration:none;font-weight:600;font-size:12px;}
+footer .footer-links a:hover{text-decoration:underline;}
+
+/* subscribe box */
+.subscribe-box{
+  background:var(--brown-900);border:1px solid rgba(201,154,74,.3);border-radius:var(--radius);
+  padding:20px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-top:26px;
+}
+.subscribe-box .grow{flex:1;min-width:200px;}
+
+.toast{
+  position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:300;
+  background:var(--brown-800);border:1px solid var(--gold);color:var(--cream);
+  padding:10px 18px;border-radius:10px;font-size:13px;box-shadow:var(--shadow);
+  opacity:0;pointer-events:none;transition:opacity .25s, top .25s;
+}
+.toast.show{opacity:1;top:26px;}
+
+.hidden{display:none !important;}
+.small-note{font-size:11px;color:var(--cream-dim);margin-top:6px;line-height:1.5;}
+
+/* confirmation modal */
+.confirm-modal .modal{max-width:420px;text-align:center;}
+.confirm-modal .modal .confirm-actions{display:flex;gap:12px;justify-content:center;margin-top:20px;}
+.confirm-modal .modal .confirm-actions button{min-width:100px;}
+.confirm-timer{font-size:13px;color:var(--cream-dim);margin:12px 0 0;font-weight:700;}
+
+/* drag handle for reorder */
+.drag-handle{cursor:grab;color:#8a6a4a;font-size:16px;padding:0 4px;}
+.drag-handle:active{cursor:grabbing;}
+.gallery-option.dragging{opacity:.4;transform:scale(.95);}
+.gallery-option.drag-over{border-color:var(--gold);background:#fff5e6;}
+
+/* FAQ styles */
+.faq-item{margin:12px 0;border-bottom:1px solid rgba(201,154,74,.15);padding-bottom:12px;}
+.faq-item .faq-q{font-weight:700;color:var(--gold-light);cursor:pointer;display:flex;justify-content:space-between;align-items:center;}
+.faq-item .faq-q:hover{color:var(--cream);}
+.faq-item .faq-a{color:var(--cream-dim);font-size:13px;line-height:1.6;max-height:0;overflow:hidden;transition:max-height .3s ease;padding-top:0;}
+.faq-item .faq-a.open{max-height:300px;padding-top:10px;}
+.faq-item .faq-toggle{font-size:18px;transition:transform .25s;}
+.faq-item .faq-toggle.open{transform:rotate(180deg);}
+
+/* Review stars */
+.star-rating{display:flex;gap:6px;justify-content:center;margin:8px 0 14px;}
+.star-rating .star{font-size:32px;cursor:pointer;color:#555;transition:color .15s, transform .15s;}
+.star-rating .star:hover{transform:scale(1.2);}
+.star-rating .star.active{color:var(--gold);}
+.star-rating .star.hover{color:var(--gold-light);}
+
+.review-item{border-bottom:1px solid rgba(201,154,74,.1);padding:10px 0;}
+.review-item:last-child{border-bottom:none;}
+.review-item .review-stars{color:var(--gold);font-size:16px;}
+.review-item .review-text{color:var(--cream-dim);font-size:13px;margin:4px 0;}
+.review-item .review-meta{font-size:11px;color:#8a6a4a;}
+
+/* Home page reviews */
+.home-reviews{background:var(--brown-900);border:1px solid rgba(201,154,74,.25);border-radius:var(--radius);padding:20px 22px;margin-top:40px;}
+.home-reviews .review-item{padding:12px 0;}
+.home-reviews .review-item:last-child{border-bottom:none;}
+.home-reviews .review-stars{color:var(--gold);font-size:16px;}
+.home-reviews .review-text{color:var(--cream-dim);font-size:14px;margin:6px 0;}
+.home-reviews .review-meta{font-size:11px;color:#8a6a4a;}
+.home-reviews .no-reviews{color:var(--cream-dim);text-align:center;padding:20px 0;font-size:14px;}
+
+/* responsive tweaks */
+@media(max-width:768px){
+  .book-progress .step-label{font-size:8px;}
+  .gallery-picker{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
+  .order-summary-sidebar{position:relative;top:0;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo"><span class="icon">🍒</span> Cherry Bakery!</div>
+    <nav id="mainNav">
+      <button class="nav-btn active" data-view="home">Home</button>
+      <button class="nav-btn" data-view="animation">Animation</button>
+      <button class="nav-btn" data-view="voiceacting">Voice Acting</button>
+      <button class="nav-btn" data-view="art">Art</button>
+      <button class="nav-btn" data-view="about">About Me</button>
+      <button class="nav-btn gold" id="loginNavBtn">Log In</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- HOME -->
+  <section class="view active" id="view-home">
+    <div class="hero">
+      <div>
+        <span class="pill-sign" id="shopSignPill">OPEN FOR COMMISSIONS</span>
+        <p class="field-hint" id="turnaroundNote" style="margin:8px 0 0;"></p>
+        <h1 style="margin-top:14px;">Welcome in! <em>Look around</em> and see what you like!</h1>
+        <p>Order something! Or relax to music in the back. Hope you like it around here!</p>
+        <div class="hero-ctas">
+          <button class="btn btn-cherry" id="orderCTA">🍰 Order a Treat</button>
+          <button class="btn btn-gold" id="trackCTA">🍓 Track My Order</button>
+        </div>
+      </div>
+      <div class="window-frame">
+        <div class="window-glass">
+          <div class="window-caption">— What's out today! —</div>
+          <div class="window-shelf" id="windowShelf"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="goal-jar-card hidden" id="goalJarWrap">
+      <h3 id="jarTitleText">Goal Jar</h3>
+      <p class="goal-jar-sub">Every commission helps fill the jar!</p>
+      <div class="jar" id="jarEl">
+        <div class="jar-lid"></div>
+        <div class="jar-neck"></div>
+        <div class="jar-body">
+          <div class="jar-fill" id="jarFill"></div>
+          <div class="jar-pct" id="jarPct">0%</div>
+        </div>
+        <span class="jar-drip" style="left:28%;animation-delay:0s;">🍒</span>
+        <span class="jar-drip" style="left:48%;animation-delay:.8s;">🍒</span>
+        <span class="jar-drip" style="left:68%;animation-delay:1.6s;">🍒</span>
+      </div>
+      <div class="jar-goal-text" id="jarGoalText"></div>
+    </div>
+
+    <!-- Home Reviews Section -->
+    <div class="home-reviews" id="homeReviews">
+      <h3 style="margin:0 0 10px;color:var(--gold-light);font-family:'Fraunces',serif;">⭐ Customer Reviews</h3>
+      <div id="homeReviewsList"></div>
+    </div>
+  </section>
+
+  <!-- ANIMATION / VOICE / ART -->
+  <section class="view" id="view-animation">
+    <div class="section-head"><h2>🎞️ Animation Work</h2><p>Check out what i have done so far!.</p></div>
+    <div class="plate-grid" id="grid-animation"></div>
+  </section>
+
+  <section class="view" id="view-voiceacting">
+    <div class="section-head"><h2>🎙️ Voice Acting</h2><p>i don't have a Description for this!.</p></div>
+    <div class="plate-grid" id="grid-voiceacting"></div>
+  </section>
+
+  <!-- ART -->
+  <section class="view" id="view-art">
+    <div class="section-head"><h2>🎨 Art</h2><p>Nor this!.</p></div>
+    <div class="plate-grid" id="grid-art"></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="view" id="view-about">
+    <div class="section-head"><h2>About Me</h2></div>
+    <div class="about-wrap">
+      <div>
+        <div class="about-photos" id="aboutPhotos"></div>
+        <div class="socials-row" id="aboutSocials"></div>
+      </div>
+      <div class="about-bio" id="aboutBio">This baker hasn't written a bio yet.</div>
+    </div>
+    <div class="subscribe-box">
+      <div class="grow">
+        <label style="margin:0 0 6px;">Get live order updates by email</label>
+        <input type="email" id="subEmail" placeholder="name@email.com">
+      </div>
+      <button class="btn btn-cherry btn-small" id="subBtn">Notify Me</button>
+    </div>
+  </section>
+
+  <!-- CLIENT DASHBOARD -->
+  <section class="view" id="view-client">
+    <div class="section-head no-print">
+      <h2 id="clientWelcome">Welcome back!</h2>
+      <p>Track your commissions.</p>
+    </div>
+    <div class="no-print" style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+      <button class="btn btn-cherry" id="newCommissionBtn">🍰 New Commission</button>
+      <button class="btn btn-outline btn-small" id="clientLogoutBtn">exit the menu</button>
+    </div>
+    <div class="no-print" id="loyaltyCard" style="margin-bottom:20px;"></div>
+    <div class="no-print" id="wishlistSection" style="margin-bottom:20px;"></div>
+    <input type="text" id="clientOrderSearch" class="no-print" placeholder="🔍 Search by order # (e.g. 004)" style="max-width:280px;margin-bottom:16px;">
+    <select id="clientStatusFilter" class="no-print" style="max-width:200px;margin-bottom:16px;">
+      <option value="">All statuses</option>
+      <option value="received">📝 Received</option>
+      <option value="progress">🔥 In Progress</option>
+      <option value="done">🍰 Done</option>
+      <option value="denied">🚫 Denied</option>
+      <option value="cancelled">❌ Cancelled</option>
+    </select>
+    <div id="clientOrders" class="book-shelf"></div>
+  </section>
+
+  <!-- ARTIST DASHBOARD -->
+  <section class="view" id="view-artist">
+    <div class="section-head">
+      <h2>🍒 Artist Kitchen</h2>
+      <p>Everything for running the shop, in one place.</p>
+    </div>
+    <div class="dash-tabs" id="artistTabs">
+      <button class="dash-tab active" data-tab="orders">Orders</button>
+      <button class="dash-tab" data-tab="completed">Completed</button>
+      <button class="dash-tab" data-tab="waitlist">Waitlist</button>
+      <button class="dash-tab" data-tab="portfolio">Portfolio</button>
+      <button class="dash-tab" data-tab="sheets">Price / Model Sheets</button>
+      <button class="dash-tab" data-tab="addons">Add-Ons</button>
+      <button class="dash-tab" data-tab="reviews">Reviews ⭐</button>
+      <button class="dash-tab" data-tab="settings">Settings</button>
+      <button class="btn btn-outline btn-small" id="artistLogoutBtn" style="margin-left:auto;">Log Out</button>
+    </div>
+    <div id="artistTabContent"></div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-links">
+    <a href="#" id="faqToggleBtn">📖 FAQ</a>
+  </div>
+  🍒 Cherry Bakery © 2026 cherriispace. All rights reserved.
+</footer>
+
+<!-- FAQ MODAL -->
+<div class="overlay" id="faqOverlay">
+  <div class="modal wide">
+    <button class="modal-close" data-close="faqOverlay">&times;</button>
+    <h2>📖 Frequently Asked Questions</h2>
+    <p class="sub">Wanna know something? check here!</p>
+    <div id="faqContainer">
+      <div class="faq-item">
+        <div class="faq-q" data-faq="0">How do I order a commission? <span class="faq-toggle">▾</span></div>
+        <div class="faq-a">Log in as a client, then click "Order a Treat" on the home page. You'll go through the Cake Book steps — choose your option, add details, and submit. After that, you can track your order and chat with me!!</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" data-faq="1">How long does a commission take? <span class="faq-toggle">▾</span></div>
+        <div class="faq-a">This really depends how busy i am! just ask!</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" data-faq="2">How do I pay? <span class="faq-toggle">▾</span></div>
+        <div class="faq-a">Currently, through cashapp! (sorry other users!) make sure to tell me the name of your cashapp! so i can confirm then unlock!</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" data-faq="3">Can I make changes to my order? <span class="faq-toggle">▾</span></div>
+        <div class="faq-a">Minor revisions are included! Just message me in chat and we'll figure it out together!</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" data-faq="4">What if the shop is "Fully Booked"? <span class="faq-toggle">▾</span></div>
+        <div class="faq-a">When my active order slots are full, the shop automatically shows "Fully Booked — Waitlist Open." You can join the waitlist with your email, and I'll reach out as soon as a slot opens up for you!</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" data-faq="5">How do I leave a review? <span class="faq-toggle">▾</span></div>
+        <div class="faq-a">After your order is marked "Done" and you download the final piece, a pop-up will appear asking if you liked how it turned out. Just click the stars to rate your experience and leave a comment — I'd love to hear your thoughts! 🍒</div>
+		
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REVIEW POPUP MODAL -->
+<div class="overlay" id="reviewOverlay">
+  <div class="modal">
+    <button class="modal-close" data-close="reviewOverlay">&times;</button>
+    <div style="text-align:center;">
+      <div style="font-size:48px;margin-bottom:8px;">📖</div>
+      <h2 style="margin-bottom:4px;">What do you think!</h2>
+      <p style="color:var(--cream-dim);font-size:15px;margin-bottom:4px;">Did you like how it turned out?</p>
+      <div class="star-rating" id="reviewStars">
+        <span class="star" data-val="1">☆</span>
+        <span class="star" data-val="2">☆</span>
+        <span class="star" data-val="3">☆</span>
+        <span class="star" data-val="4">☆</span>
+        <span class="star" data-val="5">☆</span>
+      </div>
+      <label style="text-align:left;margin-top:4px;">Your review (optional)</label>
+      <textarea id="reviewText" placeholder="Tell me what you thought! I'd really appreciate it 🍒" style="min-height:80px;"></textarea>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:14px;">
+        <button class="btn btn-outline btn-small" id="reviewSkipBtn">Skip</button>
+        <button class="btn btn-cherry" id="reviewSubmitBtn">Submit Review ⭐</button>
+      </div>
+      <div class="form-msg hidden" id="reviewMsg"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="overlay" id="loginOverlay">
+  <div class="modal">
+    <button class="modal-close" data-close="loginOverlay">&times;</button>
+    <h2>Come on in</h2>
+    <p class="sub">Log in to track your order or manage the shop.</p>
+    <div class="tabbar">
+      <button class="active" data-logintab="client">Client 🍓</button>
+      <button data-logintab="artist">Artist 🍒</button>
+    </div>
+
+    <div id="clientLoginTab">
+      <div id="clientLoginForm">
+        <label>Username</label>
+        <input type="text" id="cliLoginUser" placeholder="cherrylover22">
+        <label>Password</label>
+        <input type="password" id="cliLoginPass" placeholder="••••••••">
+        <button class="btn btn-cherry" style="width:100%;margin-top:16px;" id="cliLoginSubmit">Log In</button>
+        <p class="sub" style="margin-top:14px;">New here? <a href="#" id="showSignup">Create an account</a></p>
+        <div class="form-msg hidden" id="cliLoginMsg"></div>
+      </div>
+      <div id="clientSignupForm" class="hidden">
+        <label>Choose a username</label>
+        <input type="text" id="cliSignUser" placeholder="cherrylover22">
+        <label>Email</label>
+        <input type="email" id="cliSignEmail" placeholder="name@email.com">
+        <label>Choose a password</label>
+        <input type="password" id="cliSignPass" placeholder="••••••••">
+        <button class="btn btn-cherry" style="width:100%;margin-top:16px;" id="cliSignSubmit">Create Account</button>
+        <p class="sub" style="margin-top:14px;">Already have one? <a href="#" id="showLogin">Log in</a></p>
+        <div class="form-msg hidden" id="cliSignMsg"></div>
+      </div>
+    </div>
+
+    <div id="artistLoginTab" class="hidden">
+      <label>Username</label>
+      <input type="text" id="artLoginUser" placeholder="Username">
+      <label>Password</label>
+      <input type="password" id="artLoginPass" placeholder="••••••••">
+      <button class="btn btn-cherry" style="width:100%;margin-top:16px;" id="artLoginSubmit">Log In</button>
+      <p class="small-note">Artist access only — this login is set up for the shop owner.</p>
+      <div class="form-msg hidden" id="artLoginMsg"></div>
+    </div>
+  </div>
+</div>
+
+<!-- COMMISSION CAKE BOOK MODAL -->
+<div class="overlay" id="bookOverlay">
+  <div class="modal wide">
+    <button class="modal-close" data-close="bookOverlay">&times;</button>
+    <h2>📖 Cake Book</h2>
+    <p class="sub">See what you like! and order something</p>
+    <div class="cakebook">
+      <div class="book-spine"></div>
+      <div class="cakebook-paper">
+        <div class="book-progress" id="progressLabels">
+          <span class="p1 done"><span class="step-label">1. Terms</span></span>
+          <span class="p2"><span class="step-label">2. Choose</span></span>
+          <span class="p3"><span class="step-label">3. Details</span></span>
+          <span class="p4"><span class="step-label">4. Review</span></span>
+        </div>
+
+        <div class="book-page active" id="bookPage1">
+          <label style="margin-top:0;">Terms of Service</label>
+          <div class="tos-box" id="tosBox">Loading...</div>
+          <label class="checkline"><input type="checkbox" id="tosAgree"> I've read and agree to the Terms of Service.</label>
+          <div class="book-nav"><span></span><button class="btn btn-cherry btn-small" id="toPage2">Next Page →</button></div>
+        </div>
+
+        <div class="book-page" id="bookPage2">
+          <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">
+            <div style="flex:1;min-width:140px;">
+              <label style="margin-top:0;">Category</label>
+              <select id="ordCategory">
+                <option value="art">🎨 Art</option>
+              </select>
+            </div>
+            <button class="btn btn-gold btn-small" id="helpMeChooseBtn" style="margin-top:18px;">💬 I'm not sure — help me choose!</button>
+          </div>
+
+          <label>Choose your option</label>
+          <div class="gallery-picker" id="galleryPicker"></div>
+
+          <label>Add-Ons (optional)</label>
+          <div class="addon-grid" id="addonPicker"></div>
+
+          <label>💗 Tip Jar (optional)</label>
+          <div class="tip-jar-grid" id="tipPicker">
+            <button type="button" class="tip-btn active" data-tip="0">No tip</button>
+            <button type="button" class="tip-btn" data-tip="2">$2</button>
+            <button type="button" class="tip-btn" data-tip="5">$5</button>
+            <button type="button" class="tip-btn" data-tip="10">$10</button>
+            <button type="button" class="tip-btn" data-tip="custom">Custom</button>
+          </div>
+          <input type="number" id="ordTipCustom" placeholder="Custom tip amount" min="0" step="1" style="display:none;max-width:160px;margin-top:6px;">
+          <div class="field-hint">100% goes straight to the artist — totally optional, and always appreciated! 🍒</div>
+
+          <!-- Price Summary -->
+          <div class="price-summary" id="priceSummary">
+            <div class="price-row"><span class="label">Base Price</span><span class="value" id="basePriceDisplay">$0</span></div>
+            <div class="price-row" id="addonPriceRow"><span class="label">Add-Ons</span><span class="value" id="addonPriceDisplay">+$0</span></div>
+            <div class="price-row" id="tipPriceRow" style="display:none;"><span class="label">Tip</span><span class="value" id="tipPriceDisplay">+$0</span></div>
+            <div class="price-row total"><span class="label">Total</span><span class="value" id="totalPriceDisplay">$0</span></div>
+          </div>
+
+          <label>Tell me more about it :0!</label>
+          <textarea id="ordDetails" placeholder="Describe what you'd like, style, characters, deadlines..." maxlength="500"></textarea>
+          <div class="field-hint" id="charCounter">0 / 500 characters</div>
+
+          <label>Reference images (optional)</label>
+          <input type="file" id="ordRefFile" accept="image/*" multiple>
+          <div class="field-hint">Up to 4 images, kept small so they save nicely.</div>
+
+          <!-- Example suggestions -->
+          <div style="background:#fff5ee;border-radius:10px;padding:12px;margin-top:10px;">
+            <div style="font-size:11px;color:#8a6a4a;font-weight:700;text-transform:uppercase;letter-spacing:.4px;">💡 Quick Examples</div>
+            <div style="font-size:12px;color:#5c4531;margin-top:4px;" id="exampleSuggestions">Select a category above to see examples!</div>
+          </div>
+
+          <div class="book-nav"><button class="btn btn-outline btn-small" id="toPage1">← Back</button><button class="btn btn-cherry btn-small" id="toPage3">Next Page →</button></div>
+        </div>
+
+        <div class="book-page" id="bookPage3">
+          <label style="margin-top:0;">Your name <span class="required">*</span></label>
+          <input type="text" id="ordName" placeholder="Your name">
+          <label>Email <span class="required">*</span></label>
+          <input type="email" id="ordEmail" placeholder="name@email.com">
+
+          <label>Preferred deadline (optional)</label>
+          <input type="date" id="ordDeadline">
+          <div class="field-hint">No promises, but if you need it by a certain date let me know and I'll try my best!</div>
+
+          <label style="margin-top:4px;">Payment</label>
+          <div id="cashappBlock">
+            <div class="cashtag-box">
+              <div>💵*i couldn't think of anything cute for this i will later*<b>CashApp</b></div>
+              <div class="amt" id="cashtagDisplay">$VoiidxUnknown</div>
+              <div class="field-hint">When the order is done! let me know you paided (with the same user!, i will unlock it manually!).</div>
+            </div>
+            <label>Your CashApp username <span class="required">*</span></label>
+            <input type="text" id="ordCashtag" placeholder="$yourcashtag">
+            <div class="field-hint">So I know who's paying me — this one's required.</div>
+            <label class="checkline" style="margin-top:16px;"><input type="checkbox" id="ordAgree"> I understand and ready to order!.</label>
+          </div>
+
+          <div class="book-nav"><button class="btn btn-outline btn-small" id="toPage2b">← Back</button><button class="btn btn-cherry btn-small" id="toPage4">Next Page →</button></div>
+        </div>
+
+        <div class="book-page" id="bookPage4">
+          <div style="display:flex;gap:24px;flex-wrap:wrap;">
+            <div style="flex:2;min-width:280px;">
+              <label style="margin-top:0;">Review your order</label>
+              <div class="card" id="reviewCard"></div>
+              <label class="checkline"><input type="checkbox" id="ordSubscribe" checked> this don't work for right now</label>
+              <div class="form-msg hidden" id="bookMsg"></div>
+              <div class="book-nav"><button class="btn btn-outline btn-small" id="toPage3b">← Back</button><button class="btn btn-cherry" id="submitOrder">🍒 Place Order</button></div>
+            </div>
+            <div style="flex:1;min-width:200px;">
+              <div class="order-summary-sidebar">
+                <h4>📋 Order Summary</h4>
+                <div id="sidebarSummary"></div>
+                <div class="summary-total" id="sidebarTotal">Total: $0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="book-pagenum" id="bookPageNum">Page 1 of 4</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WAITLIST MODAL -->
+<div class="overlay" id="waitlistOverlay">
+  <div class="modal">
+    <button class="modal-close" data-close="waitlistOverlay">&times;</button>
+    <h2>📝 Join the Waitlist</h2>
+    <p class="sub">Commissions are closed right now — pop your info in and I'll reach out when a slot opens up!</p>
+    <label style="margin-top:0;">Name</label>
+    <input type="text" id="wlName" placeholder="Your name">
+    <label>Email</label>
+    <input type="email" id="wlEmail" placeholder="name@email.com">
+    <label>What are you hoping to commission? (optional)</label>
+    <textarea id="wlNote" placeholder="A quick idea of what you'd like"></textarea>
+    <button class="btn btn-cherry" style="width:100%;margin-top:16px;" id="wlSubmit">Join Waitlist</button>
+    <div class="form-msg hidden" id="wlMsg"></div>
+  </div>
+</div>
+
+<!-- CONFIRMATION MODAL -->
+<div class="overlay confirm-modal" id="confirmOverlay">
+  <div class="modal">
+    <button class="modal-close" data-close="confirmOverlay">&times;</button>
+    <h2 id="confirmTitle">Are you sure?</h2>
+    <p id="confirmMessage" style="color:var(--cream-dim);font-size:14px;line-height:1.6;"></p>
+    <div class="confirm-timer" id="confirmTimer">⏳ Confirm in <span id="confirmCountdown">3</span>s</div>
+    <div class="confirm-actions">
+      <button class="btn btn-outline" id="confirmCancelBtn">Cancel</button>
+      <button class="btn btn-danger" id="confirmActionBtn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHAT WIDGET -->
+<button class="chat-bubble" id="chatBubbleBtn">💬<span class="dot" id="chatDot"></span></button>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-head">
+    <h4 id="chatTitle">Live Chat</h4>
+    <select id="chatOrderSelect" class="hidden"></select>
+    <button class="modal-close" style="position:static;font-size:18px;" id="chatCloseBtn">&times;</button>
+  </div>
+  <div class="chat-body" id="chatBody"><div class="chat-empty">Log in to start chatting 🍒</div></div>
+  <div class="chat-input-row">
+    <input type="text" id="chatInput" placeholder="Type a message...">
+    <button id="chatSendBtn">Send</button>
+  </div>
+</div>
+
+<!-- MUSIC PLAYER -->
+<div class="music-player">
+  <button class="mp-play" id="mpPlayBtn">▶</button>
+  <div class="mp-meta">
+    <div class="mp-track" id="mpTrack">No track set</div>
+    <input type="range" id="mpVolume" min="0" max="100" value="50">
+  </div>
+  <audio id="mpAudio" loop></audio>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= STATE ================= */
+let currentUser = null;
+let siteData = { about:{bio:'',images:[]}, socials:{}, shop:{open:true} };
+let pfIndex = {animation:[], voiceacting:[], art:[]};
+let ordersCache = {};
+let selectedCategory = null;
+let refImagesData = [];
+let activeChatOrderId = null;
+let chatPollTimer = null;
+let musicLoaded = false;
+let bookLastPage = 1;
+let slotsFull = false;
+let selectedGalleryOption = null;
+let selectedAddons = [];
+let selectedTip = 0;
+let pendingReviewOrderId = null;
+
+let confirmCallback = null;
+let confirmCountdown = 0;
+let confirmInterval = null;
+
+const DEFAULT_TOS = `Thanks for commissioning me! A few quick things before we start:
+
+• Payment is due upfront via CashApp once your order is confirmed in chat.
+• Turnaround time varies by workload — I'll give you an estimate after reviewing your request.
+• You'll get progress updates through chat and your order status on this site.
+• Minor revisions are included; major changes to the original concept may cost extra.
+• Please don't request anything explicit, hateful, or involving real people without consent.
+• Once work has started, refunds are handled case by case — message me in chat if something comes up.
+• Finished pieces are for your personal use — please credit me if you share them online.
+
+Questions? Message me in chat before ordering and I'm happy to help!`;
+
+/* ================= HELPERS ================= */
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
+function esc(s){ return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+const hasCloudStorage = (typeof window.storage !== 'undefined') && window.storage && typeof window.storage.get === 'function';
+function lsGet(key){ try{ return localStorage.getItem('cb:'+key); }catch(e){ return null; } }
+function lsSet(key,value){ try{ localStorage.setItem('cb:'+key, value); return true; }catch(e){ return false; } }
+
+/* ---- Supabase config ----
+   1. Create a free project at https://supabase.com
+   2. In the SQL Editor, run:
+        create table kv_store (
+          key text primary key,
+          value text
+        );
+        alter table kv_store enable row level security;
+        create policy "public read" on kv_store for select using (true);
+        create policy "public write" on kv_store for insert with check (true);
+        create policy "public update" on kv_store for update using (true);
+        create policy "public delete" on kv_store for delete using (true);
+   3. In Project Settings > API, copy your Project URL and anon public key below.
+   NOTE: the policies above allow anyone with the anon key to read/write —
+   fine for a test/solo-artist site, but don't put real secrets in this table. */
+const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const hasSupabase = SUPABASE_URL.indexOf('YOUR_SUPABASE') !== 0 && typeof window.supabase !== 'undefined';
+const sb = hasSupabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+let apiAvailable = hasSupabase ? null : false;
+
+async function storeGet(key){
+  if(sb && apiAvailable !== false){
+    try{
+      const { data, error } = await sb.from('kv_store').select('value').eq('key', key).maybeSingle();
+      if(error) throw error;
+      apiAvailable = true;
+      return data ? data.value : null;
+    }catch(e){ apiAvailable = false; }
+  }
+  if(hasCloudStorage){
+    try{ const r = await window.storage.get(key, true); if(r) return r.value; }
+    catch(e){}
+  }
+  return lsGet(key);
+}
+async function storeSet(key, value){
+  if(sb && apiAvailable !== false){
+    try{
+      const { error } = await sb.from('kv_store').upsert({ key, value });
+      if(error) throw error;
+      apiAvailable = true;
+      return {key, value};
+    }catch(e){ apiAvailable = false; }
+  }
+  if(hasCloudStorage){
+    try{ const r = await window.storage.set(key, value, true); if(r) return r; }
+    catch(e){}
+  }
+  const ok = lsSet(key, value);
+  if(!ok){ toast('Save failed — try again'); return null; }
+  return {key, value};
+}
+async function storeList(prefix){
+  if(sb && apiAvailable !== false){
+    try{
+      let q = sb.from('kv_store').select('key');
+      if(prefix) q = q.like('key', prefix+'%');
+      const { data, error } = await q;
+      if(error) throw error;
+      apiAvailable = true;
+      return (data||[]).map(r=>r.key);
+    }catch(e){ apiAvailable = false; }
+  }
+  if(hasCloudStorage){
+    try{ const r = await window.storage.list(prefix, true); if(r) return r.keys; }
+    catch(e){}
+  }
+  const keys = [];
+  try{
+    for(let i=0;i<localStorage.length;i++){
+      const k = localStorage.key(i);
+      if(k && k.indexOf('cb:')===0){
+        const bare = k.slice(3);
+        if(!prefix || bare.indexOf(prefix)===0) keys.push(bare);
+      }
+    }
+  }catch(e){}
+  return keys;
+}
+async function storeDelete(key){
+  if(sb && apiAvailable !== false){
+    try{
+      const { error } = await sb.from('kv_store').delete().eq('key', key);
+      if(error) throw error;
+      apiAvailable = true;
+      return {key, deleted:true};
+    }catch(e){ apiAvailable = false; }
+  }
+  if(hasCloudStorage){
+    try{ return await window.storage.delete(key, true); }catch(e){}
+  }
+  try{ localStorage.removeItem('cb:'+key); return {key, deleted:true}; }catch(e){ return null; }
+}
+
+function fileToCompressedDataUrl(file, maxW, quality, mimeType){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      const img = new Image();
+      img.onload = ()=>{
+        const scale = Math.min(1, maxW/img.width);
+        const w = Math.round(img.width*scale), h = Math.round(img.height*scale);
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        resolve(canvas.toDataURL(mimeType||'image/jpeg', quality||0.75));
+      };
+      img.onerror = reject;
+      img.src = reader.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+function fileToDataUrl(file){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onload = ()=>resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+/* ================= CONFIRM MODAL ================= */
+function showConfirm(title, message, callback, dangerText){
+  const overlay = document.getElementById('confirmOverlay');
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMessage').textContent = message;
+  document.getElementById('confirmActionBtn').textContent = dangerText || 'Confirm';
+  document.getElementById('confirmActionBtn').className = 'btn ' + (dangerText ? 'btn-danger' : 'btn-cherry');
+  confirmCallback = callback;
+  confirmCountdown = 3;
+  document.getElementById('confirmCountdown').textContent = '3';
+  document.getElementById('confirmTimer').style.display = 'block';
+  overlay.classList.add('active');
+  clearInterval(confirmInterval);
+  confirmInterval = setInterval(()=>{
+    confirmCountdown--;
+    document.getElementById('confirmCountdown').textContent = Math.max(0, confirmCountdown);
+    if(confirmCountdown <= 0){
+      clearInterval(confirmInterval);
+      document.getElementById('confirmTimer').style.display = 'none';
+    }
+  }, 1000);
+}
+function closeConfirm(){
+  document.getElementById('confirmOverlay').classList.remove('active');
+  clearInterval(confirmInterval);
+  confirmCallback = null;
+}
+document.getElementById('confirmCancelBtn').addEventListener('click', closeConfirm);
+document.getElementById('confirmActionBtn').addEventListener('click', ()=>{
+  if(confirmCountdown > 0){
+    toast('Please wait ' + confirmCountdown + 's before confirming');
+    return;
+  }
+  if(confirmCallback){
+    const cb = confirmCallback;
+    confirmCallback = null;
+    closeConfirm();
+    cb();
+  }
+});
+document.getElementById('confirmOverlay').addEventListener('click', e=>{
+  if(e.target === document.getElementById('confirmOverlay')) closeConfirm();
+});
+
+/* ================= NAV / VIEWS ================= */
+function showView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const el = document.getElementById('view-'+name);
+  if(el) el.classList.add('active');
+  document.querySelectorAll('#mainNav .nav-btn[data-view]').forEach(b=>{
+    b.classList.toggle('active', b.dataset.view===name);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(name==='animation'||name==='voiceacting'||name==='art') renderPortfolioSection(name);
+  if(name==='home'){ renderWindowShowcase(); renderGoalJar(); renderHomeReviews(); }
+  if(name==='about') renderAbout();
+  if(name==='client') renderClientDashboard();
+  if(name==='artist') renderArtistTab(document.querySelector('.dash-tab.active')?.dataset.tab || 'orders');
+  refreshChatButtonVisibility();
+}
+document.getElementById('mainNav').addEventListener('click', e=>{
+  const btn = e.target.closest('.nav-btn[data-view]');
+  if(btn) showView(btn.dataset.view);
+});
+document.getElementById('orderCTA').addEventListener('click', ()=>{
+  if(!isShopOpen()){ openWaitlist(); return; }
+  if(currentUser && currentUser.role==='client') openBook();
+  else { openOverlay('loginOverlay'); toast('Log in or create a client account first 🍓'); }
+});
+document.getElementById('trackCTA').addEventListener('click', ()=>{
+  if(currentUser && currentUser.role==='client') showView('client');
+  else openOverlay('loginOverlay');
+});
+document.getElementById('loginNavBtn').addEventListener('click', ()=>{
+  if(currentUser){
+    showView(currentUser.role==='artist' ? 'artist' : 'client');
+  } else openOverlay('loginOverlay');
+});
+
+/* ================= OVERLAYS ================= */
+function openOverlay(id){ document.getElementById(id).classList.add('active'); }
+function closeOverlay(id){ document.getElementById(id).classList.remove('active'); }
+document.querySelectorAll('[data-close]').forEach(b=>{
+  b.addEventListener('click', ()=>closeOverlay(b.dataset.close));
+});
+document.querySelectorAll('.overlay').forEach(o=>{
+  o.addEventListener('click', e=>{ if(e.target===o) o.classList.remove('active'); });
+});
+
+/* ================= LOGIN TABS ================= */
+document.querySelectorAll('[data-logintab]').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    document.querySelectorAll('[data-logintab]').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById('clientLoginTab').classList.toggle('hidden', b.dataset.logintab!=='client');
+    document.getElementById('artistLoginTab').classList.toggle('hidden', b.dataset.logintab!=='artist');
+  });
+});
+document.getElementById('showSignup').addEventListener('click', e=>{
+  e.preventDefault();
+  document.getElementById('clientLoginForm').classList.add('hidden');
+  document.getElementById('clientSignupForm').classList.remove('hidden');
+});
+document.getElementById('showLogin').addEventListener('click', e=>{
+  e.preventDefault();
+  document.getElementById('clientSignupForm').classList.add('hidden');
+  document.getElementById('clientLoginForm').classList.remove('hidden');
+});
+
+/* ================= AUTH ================= */
+function msgBox(id, text, ok){
+  const el = document.getElementById(id);
+  el.textContent = text; el.classList.remove('hidden','err','ok');
+  el.classList.add(ok?'ok':'err');
+}
+document.getElementById('cliSignSubmit').addEventListener('click', async ()=>{
+  const user = document.getElementById('cliSignUser').value.trim();
+  const email = document.getElementById('cliSignEmail').value.trim();
+  const pass = document.getElementById('cliSignPass').value;
+  if(!user || !email || !pass){ msgBox('cliSignMsg','Fill in every field to keep your account safe.'); return; }
+  const existing = await storeGet('client-auth:'+user);
+  if(existing){ msgBox('cliSignMsg','That username is taken — try another.'); return; }
+  await storeSet('client-auth:'+user, JSON.stringify({password:pass, email}));
+  currentUser = {role:'client', username:user, email, name:user};
+  msgBox('cliSignMsg','Account created!', true);
+  setTimeout(()=>{ closeOverlay('loginOverlay'); afterLogin(); }, 400);
+});
+document.getElementById('cliLoginSubmit').addEventListener('click', async ()=>{
+  const user = document.getElementById('cliLoginUser').value.trim();
+  const pass = document.getElementById('cliLoginPass').value;
+  const raw = await storeGet('client-auth:'+user);
+  if(!raw){ msgBox('cliLoginMsg','No account with that username yet.'); return; }
+  const data = JSON.parse(raw);
+  if(data.password !== pass){ msgBox('cliLoginMsg','Wrong password — try again.'); return; }
+  currentUser = {role:'client', username:user, email:data.email, name:user};
+  msgBox('cliLoginMsg','Welcome back!', true);
+  setTimeout(()=>{ closeOverlay('loginOverlay'); afterLogin(); }, 300);
+});
+document.getElementById('artLoginSubmit').addEventListener('click', async ()=>{
+  const user = document.getElementById('artLoginUser').value.trim();
+  const pass = document.getElementById('artLoginPass').value;
+  let raw = await storeGet('artist-auth');
+  if(!raw || JSON.parse(raw).username === 'artist'){
+    const seed = {username:'cherriimilk', password:'14th08'};
+    await storeSet('artist-auth', JSON.stringify(seed));
+    raw = JSON.stringify(seed);
+  }
+  const data = JSON.parse(raw);
+  if(user !== data.username || pass !== data.password){ msgBox('artLoginMsg','Incorrect username or password.'); return; }
+  currentUser = {role:'artist', username:user, name:'Artist'};
+  msgBox('artLoginMsg','Welcome back!', true);
+  setTimeout(()=>{ closeOverlay('loginOverlay'); afterLogin(); }, 300);
+});
+function afterLogin(){
+  document.getElementById('loginNavBtn').textContent = currentUser.role==='artist' ? '🍒 Kitchen' : '🍓 My Account';
+  showView(currentUser.role==='artist' ? 'artist' : 'client');
+  refreshChatButtonVisibility();
+}
+document.getElementById('clientLogoutBtn').addEventListener('click', ()=>{ currentUser=null; document.getElementById('loginNavBtn').textContent='Log In'; showView('home'); toast('Logged out'); });
+document.getElementById('clientOrderSearch').addEventListener('input', ()=> renderClientDashboard());
+document.getElementById('clientStatusFilter').addEventListener('change', ()=> renderClientDashboard());
+document.getElementById('artistLogoutBtn').addEventListener('click', ()=>{ currentUser=null; document.getElementById('loginNavBtn').textContent='Log In'; showView('home'); toast('Logged out'); });
+
+/* ================= SITE DATA (about/socials/shop) ================= */
+async function loadSiteData(){
+  const raw = await storeGet('site-data');
+  if(raw){ siteData = JSON.parse(raw); }
+  if(!siteData.tos) siteData.tos = DEFAULT_TOS;
+  if(!siteData.gallery) siteData.gallery = {};
+  if(!siteData.addons) siteData.addons = [];
+  if(!siteData.windowDisplay) siteData.windowDisplay = [];
+  // Commission form is Art-only now — fold any options left under the old
+  // Animation/Voice Acting gallery categories into Art so they still show up.
+  let migrated = false;
+  ['animation','voiceacting'].forEach(cat=>{
+    if(siteData.gallery[cat] && siteData.gallery[cat].length){
+      siteData.gallery.art = (siteData.gallery.art||[]).concat(siteData.gallery[cat]);
+      delete siteData.gallery[cat];
+      migrated = true;
+    }
+  });
+  if(migrated) await saveSiteData();
+  updateShopSign();
+}
+async function saveSiteData(){ await storeSet('site-data', JSON.stringify(siteData)); }
+function applyReceiptTheme(){
+  document.body.classList.toggle('receipt-theme-paper', siteData.receiptTheme === 'paper');
+}
+function updateShopSign(){
+  const pill = document.getElementById('shopSignPill');
+  const manuallyOpen = siteData.shop && siteData.shop.open !== false;
+  const open = manuallyOpen && !slotsFull;
+  if(!manuallyOpen) pill.textContent = 'CLOSED FOR NOW';
+  else if(slotsFull) pill.textContent = 'FULLY BOOKED — WAITLIST OPEN';
+  else pill.textContent = 'OPEN FOR COMMISSIONS';
+  pill.classList.toggle('closed', !open);
+  const orderBtn = document.getElementById('orderCTA');
+  if(orderBtn) orderBtn.textContent = open ? '🍰 Order a Commission' : '📝 Join the Waitlist';
+  const tNote = document.getElementById('turnaroundNote');
+  if(tNote) tNote.textContent = siteData.turnaround ? '⏳ Current turnaround: '+siteData.turnaround : '';
+}
+
+function renderGoalJar(){
+  const jar = siteData.jar || {enabled:false,title:'',goal:0,current:0};
+  const wrap = document.getElementById('goalJarWrap');
+  if(!jar.enabled){ wrap.classList.add('hidden'); return; }
+  wrap.classList.remove('hidden');
+  const goal = Number(jar.goal)||0;
+  const current = Number(jar.current)||0;
+  const pct = goal>0 ? Math.min(100, Math.round((current/goal)*100)) : 0;
+  const full = goal>0 && current>=goal;
+  document.getElementById('jarTitleText').textContent = jar.title || 'Goal Jar';
+  document.getElementById('jarFill').style.height = pct+'%';
+  document.getElementById('jarPct').textContent = pct+'%';
+  document.getElementById('jarEl').classList.toggle('overflowing', full);
+  document.getElementById('jarGoalText').innerHTML = goal>0
+    ? (full
+        ? `🎉 Goal reached! <span class="jar-amt">${esc(String(current))}</span> / ${esc(String(goal))}`
+        : `<span class="jar-amt">${esc(String(current))}</span> / ${esc(String(goal))}`)
+    : `<span class="jar-amt">Set a goal amount in Settings to start tracking</span>`;
+}
+
+function openWaitlist(){
+  document.getElementById('wlName').value = currentUser ? currentUser.name : '';
+  document.getElementById('wlEmail').value = currentUser ? (currentUser.email||'') : '';
+  document.getElementById('wlNote').value = '';
+  document.getElementById('wlMsg').classList.add('hidden');
+  openOverlay('waitlistOverlay');
+}
+document.getElementById('wlSubmit').addEventListener('click', async ()=>{
+  const name = document.getElementById('wlName').value.trim();
+  const email = document.getElementById('wlEmail').value.trim();
+  const note = document.getElementById('wlNote').value.trim();
+  if(!name || !email){ msgBox('wlMsg','Add your name and email please'); return; }
+  const raw = await storeGet('waitlist');
+  const list = raw ? JSON.parse(raw) : [];
+  list.push({id:uid(), name, email, note, time:Date.now()});
+  await storeSet('waitlist', JSON.stringify(list));
+  msgBox('wlMsg', "You're on the list! I'll reach out when a slot opens.", true);
+  toast('🍒 Added to the waitlist');
+  setTimeout(()=>closeOverlay('waitlistOverlay'), 1200);
+});
+
+function renderAbout(){
+  document.getElementById('aboutBio').textContent = (siteData.about && siteData.about.bio) || "This baker hasn't written a bio yet.";
+  const photosEl = document.getElementById('aboutPhotos');
+  const imgs = (siteData.about && siteData.about.images) || [];
+  photosEl.innerHTML = imgs.length ? imgs.map(i=>`<img src="${i}">`).join('') : '';
+  const socialsEl = document.getElementById('aboutSocials');
+  const s = siteData.socials || {};
+  const items = [
+    ['instagram','Instagram'], ['twitter','Twitter / X'], ['tiktok','TikTok'], ['discord','Discord']
+  ];
+  socialsEl.innerHTML = items.filter(([k])=>s[k]).map(([k,label])=>`<a class="social-chip" href="${esc(s[k])}" target="_blank" rel="noopener">${label}</a>`).join('') || '<p class="small-note">No socials added yet — add them in Artist Settings.</p>';
+}
+
+document.getElementById('subBtn').addEventListener('click', async ()=>{
+  const email = document.getElementById('subEmail').value.trim();
+  if(!email || !email.includes('@')){ toast('Enter a valid email first'); return; }
+  const raw = await storeGet('subscribers');
+  const list = raw ? JSON.parse(raw) : [];
+  if(!list.includes(email)) list.push(email);
+  await storeSet('subscribers', JSON.stringify(list));
+  document.getElementById('subEmail').value='';
+  toast('Saved! (Live email delivery needs a connected email service — this stores your address so the artist can add that next.)');
+});
+
+/* ================= PORTFOLIO ================= */
+async function loadPortfolioIndex(){
+  const raw = await storeGet('portfolio-index');
+  pfIndex = raw ? JSON.parse(raw) : {animation:[], voiceacting:[], art:[]};
+}
+async function savePortfolioIndex(){ await storeSet('portfolio-index', JSON.stringify(pfIndex)); }
+
+async function renderWindowShowcase(){
+  const shelf = document.getElementById('windowShelf');
+  const ids = (siteData.windowDisplay || []).slice(0,6);
+  if(!ids.length){
+    shelf.innerHTML = '<div class="window-empty" style="grid-column:1/-1;">Hmm i guess nothing done yet! check later <3</div>';
+    return;
+  }
+  const items = await Promise.all(ids.map(id=>storeGet('portfolio-item:'+id)));
+  shelf.innerHTML = items.filter(Boolean).map(raw=>{
+    const it = JSON.parse(raw);
+    const inner = it.image ? `<img src="${it.image}" alt="">` : (it.video ? `<video src="${it.video}" muted loop autoplay playsinline></video>` : `<div class="ph">${it.audio?'🎙️':'🍰'}</div>`);
+    return `<div class="window-item"><div class="plate-mini">${inner}</div></div>`;
+  }).join('');
+}
+
+const WINDOW_DISPLAY_MAX = 6;
+async function renderWindowManager(el){
+  await loadPortfolioIndex();
+  const allIds = [...pfIndex.art, ...pfIndex.animation, ...pfIndex.voiceacting].slice().reverse();
+  if(!allIds.length){
+    el.innerHTML = '<div class="field-hint" style="padding:8px 0;">Post something to Animation, Voice Acting, or Art first — then come back here to feature it in the window.</div>';
+    return;
+  }
+  const items = await Promise.all(allIds.map(id=>storeGet('portfolio-item:'+id)));
+  const selected = siteData.windowDisplay || [];
+  el.innerHTML = `<div class="field-hint" style="margin-bottom:10px;">${selected.length}/${WINDOW_DISPLAY_MAX} selected</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;">
+    ${items.filter(Boolean).map(raw=>{
+      const it = JSON.parse(raw);
+      const isIn = selected.includes(it.id);
+      const thumb = it.image ? `<img src="${it.image}" style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;">` : (it.video ? `<video src="${it.video}" muted style="width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;"></video>` : `<div style="width:100%;aspect-ratio:1/1;border-radius:8px;background:var(--brown-950);display:flex;align-items:center;justify-content:center;font-size:22px;">${it.audio?'🎙️':'🍰'}</div>`);
+      return `<div style="text-align:center;">
+        ${thumb}
+        <div style="font-size:10.5px;color:var(--cream-dim);margin:4px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(it.title)}</div>
+        <button class="btn btn-small ${isIn?'btn-cherry':'btn-outline'} windowToggleBtn" data-id="${it.id}" style="width:100%;padding:5px;font-size:11px;">${isIn?'✓ In Window':'+ Add'}</button>
+      </div>`;
+    }).join('')}
+    </div>`;
+  el.querySelectorAll('.windowToggleBtn').forEach(b=>b.addEventListener('click', async ()=>{
+    const id = b.dataset.id;
+    const list = siteData.windowDisplay || [];
+    if(list.includes(id)){
+      siteData.windowDisplay = list.filter(x=>x!==id);
+    } else {
+      if(list.length >= WINDOW_DISPLAY_MAX){ toast(`Window only fits ${WINDOW_DISPLAY_MAX} — remove one first`); return; }
+      siteData.windowDisplay = [...list, id];
+    }
+    await saveSiteData();
+    toast('Window display updated 🪟');
+    renderWindowManager(el);
+  }));
+}
+
+let clientWishlist = [];
+async function loadWishlist(){
+  if(!currentUser || currentUser.role!=='client'){ clientWishlist = []; return; }
+  const raw = await storeGet('wishlist:'+currentUser.username);
+  clientWishlist = raw ? JSON.parse(raw) : [];
+}
+async function saveWishlist(){
+  if(!currentUser || currentUser.role!=='client') return;
+  await storeSet('wishlist:'+currentUser.username, JSON.stringify(clientWishlist));
+}
+document.addEventListener('click', async (e)=>{
+  const heart = e.target.closest('.wishlist-heart-btn');
+  if(!heart) return;
+  e.stopPropagation();
+  if(!currentUser || currentUser.role!=='client'){
+    toast('Log in as a client to save favorites 💗');
+    openOverlay('loginOverlay');
+    return;
+  }
+  const id = heart.dataset.id;
+  if(clientWishlist.includes(id)){
+    clientWishlist = clientWishlist.filter(x=>x!==id);
+    heart.textContent = '🤍';
+    heart.classList.remove('active');
+  } else {
+    clientWishlist.push(id);
+    heart.textContent = '❤️';
+    heart.classList.add('active');
+  }
+  await saveWishlist();
+  if(document.getElementById('view-client') && !document.getElementById('view-client').classList.contains('hidden')){
+    renderWishlistSection();
+  }
+});
+
+async function renderPortfolioSection(cat){
+  await loadPortfolioIndex();
+  await loadWishlist();
+  const grid = document.getElementById('grid-'+cat);
+  const ids = (pfIndex[cat]||[]).slice().reverse();
+  if(!ids.length){ grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">Nothing posted here yet — check back soon! 🍒</div>`; return; }
+  const items = await Promise.all(ids.map(id=>storeGet('portfolio-item:'+id)));
+  grid.innerHTML = items.filter(Boolean).map(raw=>{
+    const it = JSON.parse(raw);
+    const isFav = clientWishlist.includes(it.id);
+    const plateInner = it.image ? `<img src="${it.image}">` : (it.video ? `<video src="${it.video}" muted loop playsinline onmouseover="this.play()" onmouseout="this.pause()"></video>` : `<div class="ph">${it.audio?'🎙️':'🍰'}</div>`);
+    return `<div class="plate-card">
+      <div class="plate-wrap"><div class="plate">${plateInner}</div><button class="wishlist-heart-btn ${isFav?'active':''}" data-id="${it.id}" title="${isFav?'Remove from wishlist':'Save to wishlist'}">${isFav?'❤️':'🤍'}</button></div>
+      <h3>${esc(it.title)}</h3>
+      <p>${esc(it.desc)}</p>
+      ${it.video ? `<video controls src="${it.video}" style="width:100%;max-width:260px;margin-top:8px;border-radius:10px;"></video>` : ''}
+      ${it.audio ? `<audio controls src="${it.audio}" style="width:100%;max-width:220px;margin-top:8px;"></audio>` : ''}
+    </div>`;
+  }).join('');
+}
+
+/* ================= HOME REVIEWS ================= */
+async function renderHomeReviews(){
+  const container = document.getElementById('homeReviewsList');
+  const reviewsRaw = await storeGet('reviews');
+  const reviews = reviewsRaw ? JSON.parse(reviewsRaw) : [];
+  if(!reviews.length){
+    container.innerHTML = '<div class="no-reviews">No reviews yet — be the first to leave one! 🍒</div>';
+    return;
+  }
+  const featured = reviews.find(r=>r.featured);
+  const rest = reviews.filter(r=>!r.featured).sort((a,b)=>b.date-a.date).slice(0,6);
+  const featuredHtml = featured ? `
+    <div class="review-item" style="background:rgba(201,154,74,.1);border:1px solid rgba(201,154,74,.4);border-radius:12px;padding:14px 16px;margin-bottom:14px;">
+      <div style="font-size:10.5px;color:var(--gold-light);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">📌 Featured Review</div>
+      <div class="review-stars">${'⭐'.repeat(featured.rating)}</div>
+      <div class="review-text">${esc(featured.text) || '<i>No comment left</i>'}</div>
+      <div class="review-meta">${esc(featured.clientName)} · ${new Date(featured.date).toLocaleDateString()}</div>
+    </div>` : '';
+  container.innerHTML = featuredHtml + rest.map(r => `
+    <div class="review-item">
+      <div class="review-stars">${'⭐'.repeat(r.rating)}</div>
+      <div class="review-text">${esc(r.text) || '<i>No comment left</i>'}</div>
+      <div class="review-meta">${esc(r.clientName)} · ${new Date(r.date).toLocaleDateString()}</div>
+    </div>
+  `).join('');
+}
+
+/* ================= GALLERY / ADDONS ================= */
+async function loadGalleryOptions(category){
+  const gallery = siteData.gallery || {};
+  return gallery[category] || [];
+}
+
+function getSelectedOption(category, id){
+  const options = siteData.gallery[category] || [];
+  return options.find(o => o.id === id) || null;
+}
+
+function renderGalleryPicker(options, selectedId){
+  const container = document.getElementById('galleryPicker');
+  if(!options || !options.length){
+    container.innerHTML = `<div class="field-hint" style="padding:12px;text-align:center;">No options set up for this category yet. The artist will add some soon!</div>`;
+    return;
+  }
+  // Sort: visible first, then popular, then recommended
+  const sorted = [...options].sort((a,b) => {
+    if(a.visible === false && b.visible !== false) return 1;
+    if(b.visible === false && a.visible !== false) return -1;
+    if(a.popular && !b.popular) return -1;
+    if(b.popular && !a.popular) return 1;
+    if(a.recommended && !b.recommended) return -1;
+    if(b.recommended && !a.recommended) return 1;
+    return 0;
+  });
+
+  container.innerHTML = sorted.map(opt => {
+    const isSelected = selectedId === opt.id;
+    const isHidden = opt.visible === false;
+    const isSoldOut = !!opt.soldOut;
+    return `
+    <div class="gallery-option ${isSelected?'selected':''} ${isHidden?'visibility-hidden':''} ${isSoldOut?'sold-out':''}" data-id="${opt.id}" draggable="true">
+      ${opt.popular ? `<span class="popular-badge">⭐ Popular</span>` : ''}
+      ${opt.recommended ? `<span class="recommended-badge">✨ Recommended</span>` : ''}
+      ${isSoldOut ? `<span class="soldout-badge">🚫 Sold Out</span>` : ''}
+      <span class="selected-badge">✓</span>
+      ${opt.image ? `<img class="gallery-img" src="${opt.image}" alt="${esc(opt.name)}">` : `<div class="gallery-img ph">${opt.icon || '🎨'}</div>`}
+      <div class="gallery-name">${esc(opt.name)} ${isHidden ? '🙈' : ''}</div>
+      <div class="gallery-price">${opt.price ? '$'+opt.price : 'TBD'}</div>
+      ${opt.desc ? `<div class="gallery-desc">${esc(opt.desc)}</div>` : ''}
+      ${isHidden ? `<span style="font-size:9px;color:#8a6a4a;display:block;margin-top:2px;">(hidden)</span>` : ''}
+    </div>
+  `}).join('');
+
+  // Drag and drop reorder
+  let dragItem = null;
+  container.querySelectorAll('.gallery-option').forEach(el => {
+    el.addEventListener('dragstart', (e) => {
+      dragItem = el;
+      el.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    el.addEventListener('dragend', () => {
+      el.classList.remove('dragging');
+      container.querySelectorAll('.gallery-option').forEach(x => x.classList.remove('drag-over'));
+    });
+    el.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      container.querySelectorAll('.gallery-option').forEach(x => x.classList.remove('drag-over'));
+      el.classList.add('drag-over');
+    });
+    el.addEventListener('dragleave', () => {
+      el.classList.remove('drag-over');
+    });
+    el.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      el.classList.remove('drag-over');
+      if(!dragItem || dragItem === el) return;
+      const items = [...container.querySelectorAll('.gallery-option')];
+      const fromIdx = items.indexOf(dragItem);
+      const toIdx = items.indexOf(el);
+      if(fromIdx === -1 || toIdx === -1) return;
+      const category = document.getElementById('ordCategory').value;
+      const options = siteData.gallery[category] || [];
+      const [moved] = options.splice(fromIdx, 1);
+      options.splice(toIdx, 0, moved);
+      siteData.gallery[category] = options;
+      await saveSiteData();
+      toast('Reordered!');
+      renderGalleryPicker(options, selectedGalleryOption);
+    });
+  });
+
+  container.querySelectorAll('.gallery-option').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const id = el.dataset.id;
+      const option = options.find(o => o.id === id);
+      if(option && option.visible === false){
+        toast('This option is currently hidden by the artist 🙈');
+        return;
+      }
+      if(option && option.soldOut){
+        toast('This option is sold out for now 🚫');
+        return;
+      }
+      selectedGalleryOption = id;
+      container.querySelectorAll('.gallery-option').forEach(x=>x.classList.remove('selected'));
+      el.classList.add('selected');
+      updatePriceSummary();
+      updateSidebarSummary();
+    });
+  });
+}
+
+function renderAddonPicker(addons, selected){
+  const container = document.getElementById('addonPicker');
+  if(!addons || !addons.length){
+    container.innerHTML = `<div class="field-hint" style="padding:4px 0;">No add-ons available yet.</div>`;
+    return;
+  }
+  container.innerHTML = addons.map(addon => `
+    <div class="addon-chip ${selected.includes(addon.id)?'selected':''}" data-id="${addon.id}">
+      <span class="addon-check">✓</span>
+      ${esc(addon.name)}
+      ${addon.price ? `<span class="addon-price">($${addon.price})</span>` : ''}
+    </div>
+  `).join('');
+  container.querySelectorAll('.addon-chip').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const id = el.dataset.id;
+      const idx = selectedAddons.indexOf(id);
+      if(idx > -1) selectedAddons.splice(idx, 1);
+      else selectedAddons.push(id);
+      renderAddonPicker(addons, selectedAddons);
+      updatePriceSummary();
+      updateSidebarSummary();
+    });
+  });
+}
+
+function updatePriceSummary(){
+  const category = document.getElementById('ordCategory').value;
+  const options = siteData.gallery[category] || [];
+  const selected = options.find(o => o.id === selectedGalleryOption);
+  const basePrice = selected && selected.price ? parseFloat(selected.price) || 0 : 0;
+  const addons = (siteData.addons || []).filter(a => selectedAddons.includes(a.id));
+  const addonTotal = addons.reduce((sum, a) => sum + (parseFloat(a.price) || 0), 0);
+  const tip = selectedTip || 0;
+  const total = basePrice + addonTotal + tip;
+
+  document.getElementById('basePriceDisplay').textContent = basePrice > 0 ? '$'+basePrice.toFixed(2) : '$0';
+  document.getElementById('addonPriceRow').style.display = addonTotal > 0 ? 'flex' : 'none';
+  document.getElementById('addonPriceDisplay').textContent = addonTotal > 0 ? '+$'+addonTotal.toFixed(2) : '+$0';
+  document.getElementById('tipPriceRow').style.display = tip > 0 ? 'flex' : 'none';
+  document.getElementById('tipPriceDisplay').textContent = tip > 0 ? '+$'+tip.toFixed(2) : '+$0';
+  document.getElementById('totalPriceDisplay').textContent = total > 0 ? '$'+total.toFixed(2) : '$0';
+}
+
+function updateSidebarSummary(){
+  const category = document.getElementById('ordCategory').value;
+  const options = siteData.gallery[category] || [];
+  const selected = options.find(o => o.id === selectedGalleryOption);
+  const addons = (siteData.addons || []).filter(a => selectedAddons.includes(a.id));
+  const basePrice = selected && selected.price ? parseFloat(selected.price) || 0 : 0;
+  const addonTotal = addons.reduce((sum, a) => sum + (parseFloat(a.price) || 0), 0);
+  const tip = selectedTip || 0;
+  const total = basePrice + addonTotal + tip;
+
+  let html = '';
+  if(selected) html += `<div class="summary-item">${esc(selected.name)} — $${basePrice.toFixed(2)}</div>`;
+  addons.forEach(a => {
+    html += `<div class="summary-item">➕ ${esc(a.name)} ${a.price ? '+ $'+a.price : ''}</div>`;
+  });
+  if(tip > 0) html += `<div class="summary-item">💗 Tip — +$${tip.toFixed(2)}</div>`;
+  if(!selected && !addons.length && !tip) html = '<div class="summary-item" style="color:#8a6a4a;">No options selected yet</div>';
+  document.getElementById('sidebarSummary').innerHTML = html;
+  document.getElementById('sidebarTotal').textContent = total > 0 ? 'Total: $'+total.toFixed(2) : 'Total: $0';
+}
+
+/* ================= COMMISSION CAKE BOOK ================= */
+
+// Character counter
+document.getElementById('ordDetails').addEventListener('input', function(){
+  const len = this.value.length;
+  document.getElementById('charCounter').textContent = len + ' / 500 characters';
+});
+
+// Tip jar picker
+document.querySelectorAll('.tip-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tip-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const customInput = document.getElementById('ordTipCustom');
+    if(btn.dataset.tip === 'custom'){
+      customInput.style.display = 'block';
+      customInput.focus();
+      selectedTip = parseFloat(customInput.value) || 0;
+    } else {
+      customInput.style.display = 'none';
+      selectedTip = parseFloat(btn.dataset.tip) || 0;
+    }
+    updatePriceSummary();
+    updateSidebarSummary();
+  });
+});
+document.getElementById('ordTipCustom').addEventListener('input', function(){
+  selectedTip = parseFloat(this.value) || 0;
+  updatePriceSummary();
+  updateSidebarSummary();
+});
+
+// Example suggestions
+document.getElementById('ordCategory').addEventListener('change', function(){
+  const examples = {
+    art: '🎨 "A half-body illustration of my OC, soft shading, pastel colors, with a magical sparkle effect."',
+    animation: '🎞️ "A 5-second looping animation of a character waving, in a cute chibi style, 12fps."',
+    voiceacting: '🎙️ "A 30-second voice reel for a bubbly character, with two sample lines and a cheerful tone."'
+  };
+  document.getElementById('exampleSuggestions').textContent = examples[this.value] || 'Describe what you\'d like in as much detail as possible!';
+});
+
+// Help me choose button
+document.getElementById('helpMeChooseBtn').addEventListener('click', ()=>{
+  if(!currentUser){
+    toast('Please log in first to chat with the artist 🍒');
+    openOverlay('loginOverlay');
+    return;
+  }
+  // Open chat and create a new order-specific chat if needed
+  const panel = document.getElementById('chatPanel');
+  panel.classList.add('active');
+  initChatPanel();
+  // Send a quick message
+  setTimeout(() => {
+    document.getElementById('chatInput').value = 'Hi! I need help choosing what to order — can you guide me? 🍒';
+    sendChat();
+  }, 500);
+  toast('💬 Ask the artist for help in chat!');
+});
+
+async function openBook(){
+  bookLastPage = 1;
+  goPage(1);
+  document.getElementById('ordCategory').value = 'art';
+  document.getElementById('tosBox').textContent = siteData.tos || DEFAULT_TOS;
+  document.getElementById('tosAgree').checked = false;
+  document.getElementById('ordDetails').value='';
+  document.getElementById('ordRefFile').value='';
+  refImagesData = [];
+  selectedGalleryOption = null;
+  selectedAddons = [];
+  selectedTip = 0;
+  document.querySelectorAll('.tip-btn').forEach(b=>b.classList.toggle('active', b.dataset.tip==='0'));
+  document.getElementById('ordTipCustom').style.display = 'none';
+  document.getElementById('ordTipCustom').value = '';
+  document.getElementById('ordName').value = currentUser ? currentUser.name : '';
+  document.getElementById('ordEmail').value = currentUser ? (currentUser.email||'') : '';
+  document.getElementById('ordCashtag').value = '';
+  document.getElementById('ordDeadline').value = '';
+  document.getElementById('ordDeadline').min = new Date().toISOString().split('T')[0];
+  document.getElementById('cashtagDisplay').textContent = (siteData.socials && siteData.socials.cashtag) || '$cherrybaker';
+  document.getElementById('ordAgree').checked = false;
+  document.getElementById('bookMsg').classList.add('hidden');
+  document.getElementById('charCounter').textContent = '0 / 500 characters';
+
+  // Set example
+  document.getElementById('exampleSuggestions').textContent = '🎨 "A half-body illustration of my OC, soft shading, pastel colors, with a magical sparkle effect."';
+
+  // Load gallery and addons for current category
+  const category = document.getElementById('ordCategory').value;
+  const galleryOptions = await loadGalleryOptions(category);
+  renderGalleryPicker(galleryOptions, selectedGalleryOption);
+  renderAddonPicker(siteData.addons || [], selectedAddons);
+  updatePriceSummary();
+  updateSidebarSummary();
+
+  openOverlay('bookOverlay');
+}
+
+document.getElementById('ordCategory').addEventListener('change', async (e)=>{
+  const category = e.target.value;
+  const galleryOptions = await loadGalleryOptions(category);
+  selectedGalleryOption = null;
+  renderGalleryPicker(galleryOptions, null);
+  updatePriceSummary();
+  updateSidebarSummary();
+});
+
+function goPage(n){
+  const dir = n >= bookLastPage ? 'fwd' : 'back';
+  document.querySelectorAll('.book-page').forEach(p=>p.classList.remove('active','slide-fwd','slide-back'));
+  const target = document.getElementById('bookPage'+n);
+  target.classList.add('active', dir==='fwd' ? 'slide-fwd' : 'slide-back');
+  document.querySelectorAll('.book-progress span').forEach((s,i)=>s.classList.toggle('done', i < n));
+  document.getElementById('bookPageNum').textContent = 'Page '+n+' of 4';
+  bookLastPage = n;
+}
+document.getElementById('toPage2').addEventListener('click', ()=>{
+  if(!document.getElementById('tosAgree').checked){ toast('Please agree to the Terms of Service first 🍒'); return; }
+  goPage(2);
+});
+document.getElementById('toPage1').addEventListener('click', ()=>goPage(1));
+document.getElementById('toPage3').addEventListener('click', async ()=>{
+  const files = Array.from(document.getElementById('ordRefFile').files).slice(0,4);
+  if(files.length){
+    refImagesData = [];
+    for(const f of files){ try{ refImagesData.push(await fileToCompressedDataUrl(f, 700, 0.7)); }catch(e){} }
+  }
+  goPage(3);
+});
+document.getElementById('toPage2b').addEventListener('click', ()=>goPage(2));
+document.getElementById('toPage4').addEventListener('click', ()=>{
+  const name = document.getElementById('ordName').value.trim();
+  const email = document.getElementById('ordEmail').value.trim();
+  const deadline = document.getElementById('ordDeadline').value;
+  const cashtag = document.getElementById('ordCashtag').value.trim();
+  const agree = document.getElementById('ordAgree').checked;
+  const payMethod = 'cashapp';
+  if(!name || !email){ toast('Add your name and email'); return; }
+  if(!cashtag){ toast('Add your CashApp username so I know who\'s paying 🍒'); return; }
+  if(!agree){ toast('Please confirm the payment note'); return; }
+
+  selectedCategory = document.getElementById('ordCategory').value;
+  const catLabels = {animation:'🎞️ Animation', voiceacting:'🎙️ Voice Acting', art:'🎨 Art'};
+
+  // Get selected gallery option
+  const galleryOptions = siteData.gallery[selectedCategory] || [];
+  const selectedOpt = galleryOptions.find(o => o.id === selectedGalleryOption);
+  const selectedAddonList = (siteData.addons || []).filter(a => selectedAddons.includes(a.id));
+
+  // Calculate totals for display
+  const basePrice = selectedOpt && selectedOpt.price ? parseFloat(selectedOpt.price) || 0 : 0;
+  const addonTotal = selectedAddonList.reduce((sum, a) => sum + (parseFloat(a.price) || 0), 0);
+  const tip = selectedTip || 0;
+  const total = basePrice + addonTotal + tip;
+
+  document.getElementById('reviewCard').innerHTML = `
+    <p><b>Category:</b> ${catLabels[selectedCategory]||selectedCategory}</p>
+    ${selectedOpt ? `<p><b>Option:</b> ${esc(selectedOpt.name)}${selectedOpt.price ? ' — $'+selectedOpt.price : ''}</p>` : '<p><i>No option selected</i></p>'}
+    ${selectedAddonList.length ? `<p><b>Add-Ons:</b> ${selectedAddonList.map(a => esc(a.name)+(a.price?' +$'+a.price:'')).join(', ')}</p>` : ''}
+    ${tip > 0 ? `<p><b>Tip:</b> +$${tip.toFixed(2)} 💗</p>` : ''}
+    <p><b>Total Price:</b> $${total.toFixed(2)}</p>
+    ${deadline ? `<p><b>Preferred Deadline:</b> ${new Date(deadline+'T00:00:00').toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'})}</p>` : ''}
+    <p><b>Details:</b> ${esc(document.getElementById('ordDetails').value)||'—'}</p>
+    <p><b>Name:</b> ${esc(name)}</p>
+    <p><b>Email:</b> ${esc(email)}</p>
+    <p><b>Payment:</b> 💵 CashApp — ${esc(cashtag)}</p>
+    ${refImagesData.length ? refImagesData.map(img=>`<img src="${img}" style="max-width:110px;border-radius:10px;margin:8px 8px 0 0;">`).join('') : ''}
+  `;
+  updateSidebarSummary();
+  goPage(4);
+});
+document.getElementById('toPage3b').addEventListener('click', ()=>goPage(3));
+
+document.getElementById('submitOrder').addEventListener('click', async ()=>{
+  const name = document.getElementById('ordName').value.trim();
+  const email = document.getElementById('ordEmail').value.trim();
+  const deadline = document.getElementById('ordDeadline').value;
+  const cashtag = document.getElementById('ordCashtag').value.trim();
+  const details = document.getElementById('ordDetails').value.trim();
+  const subscribe = document.getElementById('ordSubscribe').checked;
+  const payMethod = 'cashapp';
+
+  // Get selected gallery option
+  const galleryOptions = siteData.gallery[selectedCategory] || [];
+  const selectedOpt = galleryOptions.find(o => o.id === selectedGalleryOption);
+  const selectedAddonList = (siteData.addons || []).filter(a => selectedAddons.includes(a.id));
+  const basePrice = selectedOpt && selectedOpt.price ? parseFloat(selectedOpt.price) || 0 : 0;
+  const addonTotal = selectedAddonList.reduce((sum, a) => sum + (parseFloat(a.price) || 0), 0);
+  const tip = selectedTip || 0;
+  const total = basePrice + addonTotal + tip;
+
+  const id = uid();
+  const number = await nextOrderNumber();
+  const order = {
+    id, number, category:selectedCategory, clientName:name, clientEmail:email, clientCashtag:cashtag,
+    clientUsername: currentUser ? currentUser.username : null,
+    selectedOption: selectedOpt || null,
+    selectedAddons: selectedAddonList || [],
+    tip: tip>0?tip:0,
+    details, deadline: deadline || null, refImages: refImagesData, status:'received',
+    paymentMethod: payMethod, tierName: selectedOpt?selectedOpt.name:null, price: total>0?total:null, paid:false, progressNote:'',
+    createdAt: Date.now(), updatedAt: Date.now(), deliverable:null, reviewGiven:false
+  };
+  await storeSet('order:'+id, JSON.stringify(order));
+  const idxRaw = await storeGet('orders-index');
+  const idx = idxRaw ? JSON.parse(idxRaw) : [];
+  idx.push(id);
+  await storeSet('orders-index', JSON.stringify(idx));
+  if(subscribe && email){
+    const subsRaw = await storeGet('subscribers');
+    const subs = subsRaw ? JSON.parse(subsRaw) : [];
+    if(!subs.includes(email)) subs.push(email);
+    await storeSet('subscribers', JSON.stringify(subs));
+  }
+  await refreshSlotStatus();
+
+  msgBox('bookMsg','Order placed! Head to My Account to track it and chat with the artist.', true);
+  toast('🍒 Order placed!');
+  setTimeout(()=>{
+    closeOverlay('bookOverlay');
+    if(currentUser){ showView('client'); } else { openOverlay('loginOverlay'); }
+  }, 900);
+});
+
+/* ================= STRIPE ================= */
+async function startStripeCheckout(order){
+  try{
+    const origin = location.origin + location.pathname;
+    const resp = await fetch('/api/create-checkout', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        orderId: order.id,
+        amount: order.price,
+        title: (order.tierName||'Commission') + ' — #' + String(order.number).padStart(3,'0'),
+        successUrl: origin+'?stripe=success&order='+order.id,
+        cancelUrl: origin+'?stripe=cancel&order='+order.id
+      })
+    });
+    const data = await resp.json();
+    if(!resp.ok || !data.url){ toast(data.error||'Checkout failed to start'); return false; }
+    window.location.href = data.url;
+    return true;
+  }catch(e){
+    toast('Could not reach payment server');
+    return false;
+  }
+}
+(function handleStripeRedirect(){
+  const params = new URLSearchParams(location.search);
+  const stripeState = params.get('stripe');
+  if(!stripeState) return;
+  if(stripeState==='success') toast('🍒 Payment received! Confirming your order...');
+  else if(stripeState==='cancel') toast('Checkout cancelled — your order is saved as unpaid, retry anytime from My Account.');
+  history.replaceState(null, '', location.pathname);
+})();
+
+/* ================= ORDERS DATA ================= */
+async function nextOrderNumber(){
+  const raw = await storeGet('order-counter');
+  const n = raw ? (parseInt(raw,10)+1) : 1;
+  await storeSet('order-counter', String(n));
+  return n;
+}
+async function loadAllOrders(){
+  const idxRaw = await storeGet('orders-index');
+  const idx = idxRaw ? JSON.parse(idxRaw) : [];
+  const raws = await Promise.all(idx.map(id=>storeGet('order:'+id)));
+  ordersCache = {};
+  raws.filter(Boolean).forEach(r=>{ const o = JSON.parse(r); ordersCache[o.id]=o; });
+  return Object.values(ordersCache).sort((a,b)=>b.createdAt-a.createdAt);
+}
+async function saveOrder(order){
+  order.updatedAt = Date.now();
+  await storeSet('order:'+order.id, JSON.stringify(order));
+  ordersCache[order.id] = order;
+}
+async function seedTestOrder(){
+  const id = uid();
+  const number = await nextOrderNumber();
+  const cats = ['animation','voiceacting','art'];
+  const category = cats[Math.floor(Math.random()*cats.length)];
+  const order = {
+    id, number, category,
+    clientName: 'Debug Client', clientEmail: 'debug@test.local', clientCashtag: '$debugtest',
+    clientUsername: 'debug_client',
+    selectedOption: null, selectedAddons: [],
+    details: 'This is a seeded test order for trying out the client dashboard.',
+    deadline: null, refImages: [], status: 'received',
+    paymentMethod: 'cashapp', tierName: null, price: 25, paid: false, progressNote: '',
+    createdAt: Date.now(), updatedAt: Date.now(), deliverable: null, reviewGiven: false
+  };
+  await storeSet('order:'+id, JSON.stringify(order));
+  const idxRaw = await storeGet('orders-index');
+  const idx = idxRaw ? JSON.parse(idxRaw) : [];
+  idx.push(id);
+  await storeSet('orders-index', JSON.stringify(idx));
+  toast('🧪 Test order seeded!');
+}
+function isShopOpen(){
+  const manuallyOpen = siteData.shop && siteData.shop.open !== false;
+  return manuallyOpen && !slotsFull;
+}
+async function refreshSlotStatus(){
+  const limit = siteData.slotLimit || 0;
+  if(!limit){ slotsFull = false; }
+  else {
+    const orders = await loadAllOrders();
+    const active = orders.filter(o=>o.status!=='done' && o.status!=='denied' && o.status!=='cancelled').length;
+    slotsFull = active >= limit;
+  }
+  updateShopSign();
+}
+
+function orderStatusBadge(status){
+  const map = {
+    received:['status-received','Received'],
+    progress:['status-progress','In Progress'],
+    done:['status-done','Done'],
+    denied:['status-denied','Denied'],
+    cancelled:['status-cancelled','Cancelled']
+  };
+  const [cls,label] = map[status]||map.received;
+  return `<span class="status-badge ${cls}">${label}</span>`;
+}
+
+function renderOrderCard(o, isArtist){
+  const catLabel = {animation:'🎞️ Animation', voiceacting:'🎙️ Voice Acting', art:'🎨 Art'}[o.category]||o.category;
+  let rewardBadge = '';
+  if(isArtist){
+    const doneForClient = Object.values(ordersCache).filter(x=>x.status==='done' && ((o.clientUsername && x.clientUsername===o.clientUsername) || (o.clientEmail && x.clientEmail===o.clientEmail))).length;
+    const pos = doneForClient % 12;
+    if(doneForClient>0 && pos%3===0){
+      rewardBadge = `<span class="status-badge" style="background:rgba(201,154,74,.25);color:#8a5a1f;">🎁 Reward earned</span>`;
+    }
+  }
+  let inner = '';
+  if(o.status==='done'){
+    let deliverableHtml = '';
+    if(o.deliverable){
+      if(o.paid){
+        const isImg = o.deliverable.indexOf('data:image')===0;
+        deliverableHtml = `<div class="deliverable-box">
+          ${isImg ? `<img src="${o.deliverable}">` : `<audio controls src="${o.deliverable}" style="width:100%;"></audio>`}
+          ${isImg ? `<a class="btn btn-cherry btn-small" style="margin-top:10px;display:inline-block;text-decoration:none;" href="${o.deliverable}" download="cherry-bakery-commission.png" data-orderid="${o.id}">⬇️ Download PNG</a>` : ''}
+        </div>`;
+      } else {
+        deliverableHtml = `<div class="locked-box">🔒 Baked and ready — this unlocks once payment is confirmed.${isArtist?'':" If you've already sent it, just say so in chat!"}</div>`;
+      }
+    }
+    inner = `
+      <div class="cakestand-wrap">
+        <div class="cakestand" id="stand-${o.id}">
+          <div class="plate"></div><div class="stem"></div><div class="cake"></div><div class="dome"></div>
+        </div>
+        <div class="cakestand-msg">It's done! Come eat! 🍰</div>
+        ${deliverableHtml}
+      </div>`;
+  } else if(o.status==='denied' || o.status==='cancelled'){
+    inner = `<div style="text-align:center;padding:20px 0;color:var(--cream-dim);">${o.status==='denied' ? '🚫 This order was denied by the artist.' : '❌ You cancelled this order.'}</div>`;
+  } else {
+    const step = o.status==='progress' ? 1 : 0;
+    inner = `
+      <div class="recipe-steps">
+        <div class="rstep ${step>=0?'on':''}"><div class="dot">🥣</div><span>Received</span></div>
+        <div class="rstep ${step>=1?'on':''}"><div class="dot">🔥</div><span>In the Oven</span></div>
+        <div class="rstep"><div class="dot">🍰</div><span>Done</span></div>
+      </div>`;
+  }
+  const orderNum = o.number ? '#'+String(o.number).padStart(3,'0') : '';
+  const bmClass = {received:'bm-received',progress:'bm-progress',done:'bm-done',denied:'bm-denied',cancelled:'bm-cancelled'}[o.status]||'bm-received';
+  
+  // Build the order details HTML (the page content)
+  let detailsHtml = `
+    <div class="order-details-grid">
+      <div><span class="label">Name:</span> <span class="value">${esc(o.clientName)}</span></div>
+      <div><span class="label">Email:</span> <span class="value">${esc(o.clientEmail)}</span></div>
+      <div><span class="label">Category:</span> <span class="value">${catLabel}</span></div>
+      <div><span class="label">Placed:</span> <span class="value">${new Date(o.createdAt).toLocaleDateString()}</span></div>
+      ${o.deadline ? `<div><span class="label">Deadline:</span> <span class="value">${new Date(o.deadline+'T00:00:00').toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'})}</span></div>` : ''}
+      <div><span class="label">Paid:</span> <span class="value">${o.paid ? '✅ $'+Number(o.price||0).toFixed(2) : '❌ $0.00'}</span></div>
+    </div>
+  `;
+  
+  if(o.selectedOption){
+    detailsHtml += `<p style="font-size:13px;color:var(--gold-light);margin:4px 0 0;">🎯 ${esc(o.selectedOption.name)}${o.selectedOption.price ? ' — $'+o.selectedOption.price : ''}</p>`;
+  }
+  if(o.selectedAddons && o.selectedAddons.length){
+    detailsHtml += `<p style="font-size:12px;color:var(--cream-dim);margin:4px 0 0;">➕ ${o.selectedAddons.map(a => esc(a.name)+(a.price?' +$'+a.price:'')).join(', ')}</p>`;
+  }
+  if(o.tip && o.tip>0){
+    detailsHtml += `<p style="font-size:12px;color:var(--cream-dim);margin:4px 0 0;">💗 Tip: +$${Number(o.tip).toFixed(2)}</p>`;
+  }
+  if(o.details){
+    detailsHtml += `<p style="font-size:13px;color:var(--cream-dim);margin:8px 0 0;line-height:1.6;">${esc(o.details)}</p>`;
+  }
+  if(o.refImages && o.refImages.length){
+    detailsHtml += o.refImages.map(img=>`<img src="${img}" style="max-width:140px;border-radius:8px;margin:8px 8px 0 0;">`).join('');
+  }
+  if(!isArtist && o.progressNote){
+    detailsHtml += `<div class="progress-note-box">📝 <b>Note from the artist:</b> ${esc(o.progressNote)}</div>`;
+  }
+  detailsHtml += inner;
+
+  const unreadKey = 'seen:'+o.id;
+  const unreadSig = (o.status||'')+'|'+(o.progressNote||'');
+  const seenSig = !isArtist ? lsGet(unreadKey) : null;
+  const isUnread = !isArtist && seenSig !== unreadSig;
+
+  return `
+  <div class="card receipt-card" data-order="${o.id}" data-unread-sig="${esc(unreadSig)}">
+    <div class="book-cover" title="Click to open your order">
+      ${isUnread ? '<span class="unread-dot" title="New update"></span>' : ''}
+      <div class="book-ribbon-wrap">
+        <div class="book-ribbon ${bmClass}"><span>Order ${orderNum||'#—'}</span></div>
+        <div class="book-heart"></div>
+      </div>
+      <div class="book-cover-title">${catLabel}</div>
+      <div class="book-cover-sub">Tap to open</div>
+      ${orderNum ? `<button class="copy-order-btn no-print" data-copy="${orderNum}" title="Copy order number">📋</button>` : ''}
+      <span class="cover-arrow">▸</span>
+    </div>
+    <div class="book-body">
+      <div class="page-content-header no-print">
+        <p class="book-hint">📖 Order Details</p>
+        ${isArtist ? `<label class="bulk-check"><input type="checkbox" class="bulkOrderChk" data-id="${o.id}"> select</label>` : ''}
+      </div>
+      <div class="order-row">
+        <div class="meta">
+          <h4>${orderStatusBadge(o.status)} ${rewardBadge} ${isArtist?`<span class="status-badge ${o.paid?'status-done':'status-progress'}">${o.paid?'Paid':'Unpaid'}</span> <span class="status-badge status-received">${o.paymentMethod==='stripe'?'💳 Stripe':'💵 CashApp'}</span>`:''}</h4>
+          <p>${isArtist? esc(o.clientName)+' · '+esc(o.clientEmail)+(o.clientCashtag?' · CashApp '+esc(o.clientCashtag):'') : 'Placed '+new Date(o.createdAt).toLocaleDateString()}${o.price!=null?' · $'+Number(o.price).toFixed(2):''}</p>
+        </div>
+        <div class="order-actions no-print">
+          ${isArtist ? `
+            <select class="statusSelect" data-id="${o.id}">
+              <option value="received" ${o.status==='received'?'selected':''}>Received</option>
+              <option value="progress" ${o.status==='progress'?'selected':''}>In Progress</option>
+              <option value="done" ${o.status==='done'?'selected':''}>Done</option>
+              <option value="denied" ${o.status==='denied'?'selected':''}>Deny</option>
+            </select>
+            <button class="btn btn-small ${o.paid?'btn-outline':'btn-gold'} paidToggleBtn" data-id="${o.id}">${o.paid?'✓ Paid':'Mark Paid'}</button>
+            <button class="btn btn-outline btn-small deliverBtn" data-id="${o.id}">Upload Final</button>
+            ${o.status!=='done' && o.status!=='denied' && o.status!=='cancelled' ? `<button class="btn btn-danger btn-small denyOrderBtn" data-id="${o.id}">🚫 Deny</button>` : ''}
+            <button class="btn btn-danger btn-small deleteOrderBtn" data-id="${o.id}">🗑️ Delete</button>
+          ` : ''}
+          ${(!isArtist && o.paymentMethod==='stripe' && !o.paid && o.status!=='denied' && o.status!=='cancelled') ? `<button class="btn btn-cherry btn-small retryPayBtn" data-id="${o.id}">💳 Retry Payment</button>` : ''}
+          ${(!isArtist && o.status!=='done' && o.status!=='denied' && o.status!=='cancelled') ? `<button class="btn btn-danger btn-small cancelOrderBtn" data-id="${o.id}">❌ Cancel</button>` : ''}
+          ${(!isArtist && o.status==='denied') ? `<span class="mini-status-note denied" style="font-size:12px;">🚫 Denied</span>` : ''}
+          ${(!isArtist && o.status==='cancelled') ? `<span class="mini-status-note cancelled" style="font-size:12px;">❌ Cancelled</span>` : ''}
+          ${(!isArtist && (o.status==='denied' || o.status==='cancelled')) ? `<button class="btn btn-danger btn-small clientDeleteBtn" data-id="${o.id}">🗑️ Delete</button>` : ''}
+          <button class="btn btn-outline btn-small printReceiptBtn" data-id="${o.id}">🖨️ Print</button>
+          <button class="btn btn-gold btn-small chatOpenBtn" data-id="${o.id}">💬 Chat</button>
+        </div>
+      </div>
+      <div class="page-content">
+        ${detailsHtml}
+        ${isArtist ? `<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;" class="no-print">
+          <input type="text" class="progressNoteInput" data-id="${o.id}" placeholder="Progress note for client (optional)" value="${esc(o.progressNote||'')}" style="flex:1;min-width:180px;">
+          <button class="btn btn-outline btn-small saveNoteBtn" data-id="${o.id}">Save Note</button>
+        </div>` : ''}
+      </div>
+    </div>
+  </div>`;
+}
+
+document.addEventListener('click', (e)=>{
+  const copyBtn = e.target.closest('.copy-order-btn');
+  if(copyBtn){
+    e.stopPropagation();
+    const val = copyBtn.dataset.copy || '';
+    (navigator.clipboard ? navigator.clipboard.writeText(val) : Promise.reject()).then(()=>{
+      toast('Copied '+val+' to clipboard');
+    }).catch(()=>{ toast('Could not copy — order is '+val); });
+    return;
+  }
+  const printBtn = e.target.closest('.printReceiptBtn');
+  if(printBtn){
+    const card = printBtn.closest('.receipt-card');
+    if(card){
+      card.classList.add('expanded','print-target');
+      document.body.classList.add('printing-receipt');
+      setTimeout(()=>window.print(), 50);
+    }
+    return;
+  }
+  const cover = e.target.closest('.book-cover');
+  if(!cover) return;
+  const card = cover.closest('.receipt-card');
+  if(!card) return;
+  card.classList.toggle('expanded');
+  playPageFlip();
+  if(card.classList.contains('expanded')){
+    const orderId = card.dataset.order;
+    const sig = card.dataset.unreadSig;
+    if(orderId && sig!==undefined){
+      lsSet('seen:'+orderId, sig);
+      const dot = cover.querySelector('.unread-dot');
+      if(dot) dot.remove();
+    }
+  }
+});
+window.addEventListener('afterprint', ()=>{
+  document.body.classList.remove('printing-receipt');
+  document.querySelectorAll('.print-target').forEach(el=>el.classList.remove('print-target'));
+});
+function playPageFlip(){
+  try{
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if(!Ctx) return;
+    const ctx = window.__flipCtx || (window.__flipCtx = new Ctx());
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(320, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.12);
+    gain.gain.setValueAtTime(0.05, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.15);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + 0.16);
+  }catch(e){}
+}
+
+async function renderWishlistSection(){
+  const container = document.getElementById('wishlistSection');
+  if(!container || !currentUser || currentUser.role!=='client') return;
+  await loadWishlist();
+  if(!clientWishlist.length){ container.innerHTML = ''; return; }
+  const items = await Promise.all(clientWishlist.map(id=>storeGet('portfolio-item:'+id)));
+  const valid = items.filter(Boolean).map(r=>JSON.parse(r));
+  if(!valid.length){ container.innerHTML = ''; return; }
+  container.innerHTML = `
+    <div class="wishlist-strip-wrap">
+      <div class="wishlist-strip-head">❤️ My Wishlist <span style="opacity:.6;font-weight:400;">(${valid.length})</span></div>
+      <div class="wishlist-strip">
+        ${valid.map(it => `
+          <div class="wishlist-item">
+            <div class="wishlist-thumb">${it.image ? `<img src="${it.image}">` : (it.video ? `<video src="${it.video}" muted></video>` : `<div class="ph">${it.audio?'🎙️':'🍰'}</div>`)}
+              <button class="wishlist-heart-btn active" data-id="${it.id}" title="Remove from wishlist">❤️</button>
+            </div>
+            <div class="wishlist-title">${esc(it.title)}</div>
+            <button class="btn btn-outline btn-small useAsRefBtn" data-id="${it.id}" style="width:100%;font-size:11px;padding:5px;">Use as Reference</button>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+  container.querySelectorAll('.useAsRefBtn').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const it = valid.find(v=>v.id===btn.dataset.id);
+      if(!it) return;
+      await openBook();
+      if(it.image && !refImagesData.includes(it.image)){
+        refImagesData.push(it.image);
+      }
+      const detailsEl = document.getElementById('ordDetails');
+      const note = `I'd love something inspired by "${it.title}" from your portfolio!`;
+      detailsEl.value = detailsEl.value ? detailsEl.value + '\n' + note : note;
+      document.getElementById('charCounter').textContent = detailsEl.value.length + ' / 500 characters';
+      toast('💗 Added as reference — take a look at page 2!');
+    });
+  });
+}
+
+async function renderLoyaltyCard(){
+  const container = document.getElementById('loyaltyCard');
+  if(!container || !currentUser || currentUser.role!=='client') return;
+  const orders = await loadAllOrders();
+  const doneCount = orders.filter(o=>o.status==='done' && (o.clientUsername===currentUser.username || o.clientEmail===currentUser.email)).length;
+  const pos = doneCount % 12;
+  const justEarned = doneCount>0 && pos%3===0;
+  const totalRewards = Math.floor(doneCount/3);
+  const untilNext = pos%3===0 ? 3 : 3-(pos%3);
+  let slotsHtml = '';
+  for(let i=0;i<12;i++){
+    const filled = i < pos;
+    const isRewardSlot = (i+1)%3===0;
+    slotsHtml += `<span class="loyalty-slot ${filled?'filled':''} ${isRewardSlot?'reward':''}">${filled ? (isRewardSlot?'★':'●') : (isRewardSlot?'☆':'○')}</span>`;
+  }
+  container.innerHTML = `
+    <div class="loyalty-card-inner">
+      <div class="loyalty-card-head">
+        <span class="loyalty-title">📚 Loyalty Checkout Card</span>
+        <span class="loyalty-sub">Every 3rd completed order earns 15% off or a freebie!</span>
+      </div>
+      <div class="loyalty-slots">${slotsHtml}</div>
+      <div class="loyalty-footer">
+        ${doneCount===0
+          ? `<span>Complete your first order to start punching your card!</span>`
+          : justEarned
+            ? `<span class="loyalty-earned">🎉 Reward unlocked! Mention it to the artist on your next order 💌</span>`
+            : `<span>${untilNext} more completed order${untilNext===1?'':'s'} until your next reward</span>`}
+        ${totalRewards>0 ? `<span class="loyalty-total">🎁 ${totalRewards} reward${totalRewards===1?'':'s'} earned total</span>` : ''}
+      </div>
+    </div>`;
+}
+
+async function renderClientDashboard(){
+  if(!currentUser || currentUser.role!=='client'){ return; }
+  document.getElementById('clientWelcome').textContent = 'Welcome back, '+currentUser.username+'!';
+  renderLoyaltyCard();
+  renderWishlistSection();
+  const orders = await loadAllOrders();
+  const mine = orders.filter(o=>o.clientUsername===currentUser.username || o.clientEmail===currentUser.email);
+  const searchVal = (document.getElementById('clientOrderSearch').value || '').trim().replace('#','');
+  const statusVal = document.getElementById('clientStatusFilter').value;
+  let filteredMine = searchVal
+    ? mine.filter(o => String(o.number||'').padStart(3,'0').includes(searchVal) || String(o.number||'')===searchVal)
+    : mine;
+  if(statusVal) filteredMine = filteredMine.filter(o => o.status === statusVal);
+  const wrap = document.getElementById('clientOrders');
+
+  // Add timeline for each order
+  wrap.innerHTML = filteredMine.length ? filteredMine.map(o=>{
+    const orderNum = o.number ? '#'+String(o.number).padStart(3,'0') : '';
+    const statusOrder = ['received','progress','done'];
+    const currentIdx = statusOrder.indexOf(o.status);
+    const steps = [
+      {icon:'📝', label:'Received'},
+      {icon:'🔥', label:'In Progress'},
+      {icon:'🍰', label:'Done'}
+    ];
+    const timelineHtml = o.status !== 'denied' && o.status !== 'cancelled' ? `
+      <div class="timeline-steps">
+        ${steps.map((s,i) => `
+          <div class="timeline-step ${i <= currentIdx ? (i === currentIdx ? 'active' : 'done') : ''}">
+            <span class="step-icon">${s.icon}</span>
+            <span class="step-label">${s.label}</span>
+          </div>
+        `).join('')}
+      </div>
+    ` : '';
+    return renderOrderCard(o,false).replace('<div class="order-row"', timelineHtml+'<div class="order-row"');
+  }).join('') : (mine.length ? '<div class="empty-state">No orders match those filters.</div>' : (
+      currentUser.username==='debug_client'
+        ? '<div class="empty-state">No test orders yet. <button class="btn btn-gold btn-small" id="seedTestOrderBtn" style="margin-top:10px;">🧪 Seed a Test Order</button></div>'
+        : '<div class="empty-state">No commissions yet — place your first one! 🍒</div>'
+    ));
+  const seedBtn = document.getElementById('seedTestOrderBtn');
+  if(seedBtn) seedBtn.addEventListener('click', async ()=>{ await seedTestOrder(); renderClientDashboard(); });
+  filteredMine.forEach(o=>{
+    if(o.status==='done'){
+      setTimeout(()=>{ const el = document.getElementById('stand-'+o.id); if(el) el.classList.add('revealed'); }, 350);
+    }
+  });
+
+  // Attach download listeners to trigger review popup
+  document.querySelectorAll('.deliverable-box a[download]').forEach(a => {
+    a.addEventListener('click', function(e) {
+      const orderId = this.dataset.orderid;
+      if(orderId){
+        const order = ordersCache[orderId];
+        if(order && !order.reviewGiven){
+          pendingReviewOrderId = orderId;
+          // Use a small delay so the download starts first
+          setTimeout(() => {
+            openReviewPopup(orderId);
+          }, 300);
+        }
+      }
+    });
+  });
+}
+
+document.getElementById('newCommissionBtn').addEventListener('click', ()=>{
+  if(!isShopOpen()){ openWaitlist(); return; }
+  openBook();
+});
+
+document.getElementById('clientOrders').addEventListener('click', async e=>{
+  const chatBtn = e.target.closest('.chatOpenBtn');
+  if(chatBtn) openChatForOrder(chatBtn.dataset.id);
+  const retryBtn = e.target.closest('.retryPayBtn');
+  if(retryBtn){
+    const o = ordersCache[retryBtn.dataset.id];
+    if(o) await startStripeCheckout(o);
+  }
+  const cancelBtn = e.target.closest('.cancelOrderBtn');
+  if(cancelBtn){
+    const o = ordersCache[cancelBtn.dataset.id];
+    if(o){
+      showConfirm(
+        'Cancel Order?',
+        `Are you sure you want to cancel order ${o.number?'#'+String(o.number).padStart(3,'0'):''}? This cannot be undone.`,
+        async ()=>{
+          o.status = 'cancelled';
+          await saveOrder(o);
+          await refreshSlotStatus();
+          toast('❌ Order cancelled');
+          renderClientDashboard();
+        },
+        'Yes, Cancel Order'
+      );
+    }
+  }
+  const clientDelBtn = e.target.closest('.clientDeleteBtn');
+  if(clientDelBtn){
+    const o = ordersCache[clientDelBtn.dataset.id];
+    if(o){
+      showConfirm(
+        'Delete Order?',
+        `Permanently remove ${o.status} order ${o.number?'#'+String(o.number).padStart(3,'0'):''} from your list? This cannot be undone.`,
+        async ()=>{
+          const idxRaw = await storeGet('orders-index');
+          const idx = idxRaw ? JSON.parse(idxRaw) : [];
+          const newIdx = idx.filter(id=>id!==o.id);
+          await storeSet('orders-index', JSON.stringify(newIdx));
+          await storeDelete('order:'+o.id);
+          delete ordersCache[o.id];
+          toast('🗑️ Order deleted');
+          renderClientDashboard();
+        },
+        'Yes, Delete Permanently'
+      );
+    }
+  }
+});
+
+/* ================= REVIEW SYSTEM ================= */
+function openReviewPopup(orderId){
+  const overlay = document.getElementById('reviewOverlay');
+  document.getElementById('reviewText').value = '';
+  document.querySelectorAll('.star-rating .star').forEach(s => s.classList.remove('active','hover'));
+  document.getElementById('reviewMsg').classList.add('hidden');
+  pendingReviewOrderId = orderId;
+  overlay.classList.add('active');
+}
+
+// Star rating
+document.querySelectorAll('.star-rating .star').forEach(star => {
+  star.addEventListener('mouseenter', function() {
+    const val = parseInt(this.dataset.val);
+    document.querySelectorAll('.star-rating .star').forEach(s => {
+      s.classList.toggle('hover', parseInt(s.dataset.val) <= val);
+    });
+  });
+  star.addEventListener('mouseleave', function() {
+    document.querySelectorAll('.star-rating .star').forEach(s => s.classList.remove('hover'));
+  });
+  star.addEventListener('click', function() {
+    const val = parseInt(this.dataset.val);
+    document.querySelectorAll('.star-rating .star').forEach(s => {
+      s.classList.toggle('active', parseInt(s.dataset.val) <= val);
+    });
+  });
+});
+
+document.getElementById('reviewSkipBtn').addEventListener('click', ()=>{
+  closeOverlay('reviewOverlay');
+  pendingReviewOrderId = null;
+});
+
+document.getElementById('reviewSubmitBtn').addEventListener('click', async ()=>{
+  const activeStars = document.querySelectorAll('.star-rating .star.active').length;
+  const text = document.getElementById('reviewText').value.trim();
+  const msg = document.getElementById('reviewMsg');
+  
+  if(activeStars === 0){
+    msg.textContent = 'Please click a star rating! ⭐';
+    msg.classList.remove('hidden','ok');
+    msg.classList.add('err');
+    return;
+  }
+
+  if(!pendingReviewOrderId){
+    msg.textContent = 'Something went wrong — please try again.';
+    msg.classList.remove('hidden','ok');
+    msg.classList.add('err');
+    return;
+  }
+
+  // Save the review
+  const order = ordersCache[pendingReviewOrderId];
+  if(order){
+    order.reviewGiven = true;
+    order.reviewRating = activeStars;
+    order.reviewText = text;
+    await saveOrder(order);
+    
+    // Also store in reviews collection for artist dashboard
+    const reviewsRaw = await storeGet('reviews');
+    const reviews = reviewsRaw ? JSON.parse(reviewsRaw) : [];
+    reviews.push({
+      orderId: order.id,
+      orderNumber: order.number,
+      clientName: order.clientName,
+      rating: activeStars,
+      text: text,
+      date: Date.now()
+    });
+    await storeSet('reviews', JSON.stringify(reviews));
+  }
+
+  msg.textContent = 'Thank you so much for the review! 🍒❤️';
+  msg.classList.remove('hidden','err');
+  msg.classList.add('ok');
+  setTimeout(()=>{
+    closeOverlay('reviewOverlay');
+    pendingReviewOrderId = null;
+    renderHomeReviews(); // Refresh home page reviews
+  }, 1200);
+});
+
+/* ================= ARTIST DASHBOARD ================= */
+document.getElementById('artistTabs').addEventListener('click', e=>{
+  const t = e.target.closest('.dash-tab');
+  if(!t) return;
+  document.querySelectorAll('.dash-tab').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  renderArtistTab(t.dataset.tab);
+});
+
+async function renderArtistTab(tab){
+  const el = document.getElementById('artistTabContent');
+  if(!currentUser || currentUser.role!=='artist') return;
+  
+  if(tab==='reviews'){
+    const reviewsRaw = await storeGet('reviews');
+    const reviews = reviewsRaw ? JSON.parse(reviewsRaw) : [];
+    const avg = reviews.length ? (reviews.reduce((sum,r)=>sum+r.rating,0)/reviews.length).toFixed(1) : '—';
+    el.innerHTML = `
+      <div class="stats-row">
+        <div class="stat-tile"><div class="num">${reviews.length}</div><div class="lbl">Total Reviews</div></div>
+        <div class="stat-tile"><div class="num">${avg}</div><div class="lbl">Average Rating ⭐</div></div>
+      </div>
+      ${reviews.length ? reviews.sort((a,b)=>b.date-a.date).map(r => `
+        <div class="review-item">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;">
+            <div class="review-stars">${'⭐'.repeat(r.rating)}</div>
+            <button class="btn btn-small ${r.featured?'btn-cherry':'btn-outline'} featureReviewBtn" data-orderid="${r.orderId}">${r.featured?'📌 Featured':'📌 Feature this'}</button>
+          </div>
+          <div class="review-text">${esc(r.text) || '<i>No comment left</i>'}</div>
+          <div class="review-meta">${esc(r.clientName)} · ${new Date(r.date).toLocaleDateString()} · Order #${String(r.orderNumber).padStart(3,'0')}</div>
+        </div>
+      `).join('') : '<div class="empty-state">No reviews yet — wait for your first happy customer! 🍒</div>'}
+    `;
+    el.querySelectorAll('.featureReviewBtn').forEach(b=>b.addEventListener('click', async ()=>{
+      const orderId = b.dataset.orderid;
+      const target = reviews.find(r=>r.orderId===orderId);
+      const turningOn = target && !target.featured;
+      reviews.forEach(r => r.featured = (r.orderId===orderId && turningOn));
+      await storeSet('reviews', JSON.stringify(reviews));
+      toast(turningOn ? '📌 Featured on the home page!' : 'Unfeatured');
+      renderArtistTab('reviews');
+    }));
+    return;
+  }
+
+  if(tab==='orders' || tab==='completed'){
+    const orders = await loadAllOrders();
+    let filtered = tab==='completed' ? orders.filter(o=>o.status==='done' || o.status==='denied' || o.status==='cancelled') : orders.filter(o=>o.status!=='done' && o.status!=='denied' && o.status!=='cancelled');
+    if(tab==='completed'){
+      filtered = orders.filter(o=>o.status==='done' || o.status==='denied' || o.status==='cancelled');
+    }
+    let statsHtml = '';
+    if(tab==='orders'){
+      const waitRaw = await storeGet('waitlist');
+      const waitCount = waitRaw ? JSON.parse(waitRaw).length : 0;
+      const active = orders.filter(o=>o.status!=='done' && o.status!=='denied' && o.status!=='cancelled').length;
+      const unpaidDone = orders.filter(o=>(o.status==='done') && !o.paid).length;
+
+      // Busiest day of week (by when orders came in)
+      const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      let busiestDay = '—';
+      if(orders.length){
+        const counts = [0,0,0,0,0,0,0];
+        orders.forEach(o => counts[new Date(o.createdAt).getDay()]++);
+        const maxCount = Math.max(...counts);
+        busiestDay = maxCount>0 ? dayNames[counts.indexOf(maxCount)] : '—';
+      }
+
+      // Average turnaround for completed orders (received -> done)
+      const doneOrders = orders.filter(o=>o.status==='done' && o.updatedAt && o.createdAt);
+      let avgTurnaround = '—';
+      if(doneOrders.length){
+        const totalDays = doneOrders.reduce((sum,o)=> sum + (o.updatedAt - o.createdAt)/86400000, 0);
+        avgTurnaround = (totalDays/doneOrders.length).toFixed(1)+'d';
+      }
+
+      statsHtml = `<div class="stats-row">
+        <div class="stat-tile"><div class="num">${orders.length}</div><div class="lbl">Total Orders</div></div>
+        <div class="stat-tile"><div class="num">${active}</div><div class="lbl">In Progress</div></div>
+        <div class="stat-tile"><div class="num">${unpaidDone}</div><div class="lbl">Awaiting Payment</div></div>
+        <div class="stat-tile"><div class="num">${waitCount}</div><div class="lbl">Waitlist</div></div>
+        <div class="stat-tile"><div class="num">${busiestDay}</div><div class="lbl">Busiest Day</div></div>
+        <div class="stat-tile"><div class="num">${avgTurnaround}</div><div class="lbl">Avg Turnaround</div></div>
+      </div>`;
+    }
+    const bulkToolbarHtml = filtered.length ? `
+      <div class="bulk-toolbar no-print" id="bulkToolbar">
+        <label class="checkline" style="margin:0;"><input type="checkbox" id="bulkSelectAll"> <span id="bulkCount">0 selected</span></label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-gold btn-small" id="bulkMarkPaidBtn" disabled>💰 Mark Paid</button>
+          <button class="btn btn-outline btn-small" id="bulkMarkProgressBtn" disabled>🔥 Mark In Progress</button>
+          <button class="btn btn-outline btn-small" id="bulkMarkDoneBtn" disabled>🍰 Mark Done</button>
+          <button class="btn btn-danger btn-small" id="bulkDeleteBtn" disabled>🗑️ Delete Selected</button>
+        </div>
+      </div>
+    ` : '';
+    el.innerHTML = statsHtml + bulkToolbarHtml + (filtered.length ? filtered.map(o=>renderOrderCard(o,true)).join('') : `<div class="empty-state">Nothing here yet.</div>`);
+    el.querySelectorAll('.statusSelect').forEach(sel=>{
+      sel.addEventListener('change', async ()=>{
+        const o = ordersCache[sel.dataset.id];
+        if(sel.value === 'denied'){
+          showConfirm(
+            'Deny Order?',
+            `Are you sure you want to deny ${o.clientName}'s order? This will notify them and remove it from your active orders.`,
+            async ()=>{
+              o.status = 'denied';
+              await saveOrder(o);
+              await refreshSlotStatus();
+              toast('🚫 Order denied');
+              renderArtistTab(tab);
+            },
+            'Yes, Deny Order'
+          );
+          sel.value = o.status;
+          return;
+        }
+        o.status = sel.value;
+        await saveOrder(o);
+        await refreshSlotStatus();
+        toast('Order updated');
+        renderArtistTab(tab);
+      });
+    });
+    el.querySelectorAll('.paidToggleBtn').forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        const o = ordersCache[btn.dataset.id];
+        o.paid = !o.paid;
+        await saveOrder(o);
+        toast(o.paid ? '💰 Marked as paid — deliverable unlocked' : 'Marked as unpaid — deliverable locked');
+        renderArtistTab(tab);
+      });
+    });
+    el.querySelectorAll('.saveNoteBtn').forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        const o = ordersCache[btn.dataset.id];
+        const input = el.querySelector(`.progressNoteInput[data-id="${btn.dataset.id}"]`);
+        o.progressNote = input.value.trim();
+        await saveOrder(o);
+        toast('Note saved');
+      });
+    });
+    el.querySelectorAll('.deliverBtn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const input = document.createElement('input');
+        input.type='file'; input.accept='image/*,audio/*';
+        input.onchange = async ()=>{
+          const file = input.files[0];
+          if(!file) return;
+          const o = ordersCache[btn.dataset.id];
+          if(file.type.startsWith('image/')) o.deliverable = await fileToCompressedDataUrl(file, 1600, 0.9, 'image/png');
+          else o.deliverable = await fileToDataUrl(file);
+          o.status = 'done';
+          await saveOrder(o);
+          await refreshSlotStatus();
+          toast('🍰 Delivered! It stays locked for the client until you mark the order Paid.');
+          renderArtistTab(tab);
+        };
+        input.click();
+      });
+    });
+    el.querySelectorAll('.denyOrderBtn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const o = ordersCache[btn.dataset.id];
+        showConfirm(
+          'Deny Order?',
+          `Are you sure you want to deny ${o.clientName}'s order? This will notify them and remove it from your active orders.`,
+          async ()=>{
+            o.status = 'denied';
+            await saveOrder(o);
+            await refreshSlotStatus();
+            toast('🚫 Order denied');
+            renderArtistTab(tab);
+          },
+          'Yes, Deny Order'
+        );
+      });
+    });
+    el.querySelectorAll('.deleteOrderBtn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const o = ordersCache[btn.dataset.id];
+        const isActive = o.status==='received' || o.status==='progress';
+        const warning = isActive
+          ? `⚠️ This order is still active (${o.status==='progress'?'in progress':'received'}) — deleting it now will remove it completely, including any progress notes or reference files. `
+          : (o.status==='done'
+            ? `⚠️ This order is marked done — deleting it will also erase the delivered file and its paid/unpaid record. `
+            : '');
+        showConfirm(
+          'Delete Order?',
+          `${warning}Are you sure you want to permanently delete ${o.clientName}'s order (${o.number?'#'+String(o.number).padStart(3,'0'):''})? This cannot be undone!`,
+          async ()=>{
+            const idxRaw = await storeGet('orders-index');
+            const idx = idxRaw ? JSON.parse(idxRaw) : [];
+            const newIdx = idx.filter(id=>id!==o.id);
+            await storeSet('orders-index', JSON.stringify(newIdx));
+            await storeDelete('order:'+o.id);
+            delete ordersCache[o.id];
+            await refreshSlotStatus();
+            toast('🗑️ Order deleted');
+            renderArtistTab(tab);
+          },
+          'Yes, Delete Permanently'
+        );
+      });
+    });
+    el.querySelectorAll('.chatOpenBtn').forEach(btn=>btn.addEventListener('click', ()=>openChatForOrder(btn.dataset.id)));
+    setupBulkActions(el, tab);
+  }
+  else if(tab==='waitlist'){ renderWaitlistManager(el); }
+  else if(tab==='portfolio'){ renderPortfolioManager(el); }
+  else if(tab==='sheets'){ renderSheetsManager(el); }
+  else if(tab==='addons'){ renderAddonsManager(el); }
+  else if(tab==='settings'){ renderSettingsManager(el); }
+}
+
+function setupBulkActions(el, tab){
+  const toolbar = document.getElementById('bulkToolbar');
+  if(!toolbar) return;
+  const countEl = document.getElementById('bulkCount');
+  const selectAllChk = document.getElementById('bulkSelectAll');
+  const actionBtnIds = ['bulkMarkPaidBtn','bulkMarkProgressBtn','bulkMarkDoneBtn','bulkDeleteBtn'];
+  const chks = () => Array.from(el.querySelectorAll('.bulkOrderChk'));
+  function updateCount(){
+    const n = chks().filter(c=>c.checked).length;
+    countEl.textContent = n + ' selected';
+    actionBtnIds.forEach(id=>{ const b = document.getElementById(id); if(b) b.disabled = n===0; });
+    selectAllChk.checked = n>0 && n===chks().length;
+  }
+  chks().forEach(c=>c.addEventListener('change', updateCount));
+  selectAllChk.addEventListener('change', ()=>{
+    chks().forEach(c=>{ c.checked = selectAllChk.checked; });
+    updateCount();
+  });
+  function selectedIds(){ return chks().filter(c=>c.checked).map(c=>c.dataset.id); }
+  document.getElementById('bulkMarkPaidBtn').addEventListener('click', async ()=>{
+    const ids = selectedIds(); if(!ids.length) return;
+    for(const id of ids){ const o = ordersCache[id]; if(o){ o.paid = true; await saveOrder(o); } }
+    toast(`💰 Marked ${ids.length} order(s) as paid`);
+    renderArtistTab(tab);
+  });
+  document.getElementById('bulkMarkProgressBtn').addEventListener('click', async ()=>{
+    const ids = selectedIds(); if(!ids.length) return;
+    for(const id of ids){ const o = ordersCache[id]; if(o){ o.status = 'progress'; await saveOrder(o); } }
+    await refreshSlotStatus();
+    toast(`🔥 Marked ${ids.length} order(s) in progress`);
+    renderArtistTab(tab);
+  });
+  document.getElementById('bulkMarkDoneBtn').addEventListener('click', async ()=>{
+    const ids = selectedIds(); if(!ids.length) return;
+    for(const id of ids){ const o = ordersCache[id]; if(o){ o.status = 'done'; await saveOrder(o); } }
+    await refreshSlotStatus();
+    toast(`🍰 Marked ${ids.length} order(s) as done`);
+    renderArtistTab(tab);
+  });
+  document.getElementById('bulkDeleteBtn').addEventListener('click', ()=>{
+    const ids = selectedIds(); if(!ids.length) return;
+    showConfirm(
+      'Delete Selected Orders?',
+      `Are you sure you want to permanently delete ${ids.length} order(s)? This cannot be undone!`,
+      async ()=>{
+        const idxRaw = await storeGet('orders-index');
+        let idx = idxRaw ? JSON.parse(idxRaw) : [];
+        idx = idx.filter(id=>!ids.includes(id));
+        await storeSet('orders-index', JSON.stringify(idx));
+        for(const id of ids){ await storeDelete('order:'+id); delete ordersCache[id]; }
+        await refreshSlotStatus();
+        toast(`🗑️ Deleted ${ids.length} order(s)`);
+        renderArtistTab(tab);
+      },
+      'Yes, Delete Permanently'
+    );
+  });
+  updateCount();
+}
+
+async function renderWaitlistManager(el){
+  el.innerHTML = '<div class="card"><p class="small-note">Loading...</p></div>';
+  const raw = await storeGet('waitlist');
+  const list = (raw ? JSON.parse(raw) : []).sort((a,b)=>b.time-a.time);
+  el.innerHTML = list.length ? list.map(w=>`
+    <div class="card">
+      <div class="order-row">
+        <div class="meta"><h4>${esc(w.name)}</h4><p>${esc(w.email)} · ${new Date(w.time).toLocaleDateString()}</p></div>
+        <button class="btn btn-danger btn-small wlDelBtn" data-id="${w.id}">Remove</button>
+      </div>
+      ${w.note ? `<p style="font-size:13px;color:var(--cream-dim);margin:10px 0 0;">${esc(w.note)}</p>` : ''}
+    </div>
+  `).join('') : '<div class="empty-state">No one on the waitlist yet.</div>';
+  el.querySelectorAll('.wlDelBtn').forEach(b=>b.addEventListener('click', async ()=>{
+    const raw2 = await storeGet('waitlist');
+    const list2 = (raw2 ? JSON.parse(raw2) : []).filter(w=>w.id!==b.dataset.id);
+    await storeSet('waitlist', JSON.stringify(list2));
+    toast('Removed from waitlist');
+    renderWaitlistManager(el);
+  }));
+}
+
+function renderPortfolioManager(el){
+  el.innerHTML = `
+    <div class="card">
+      <label style="margin-top:0;">Section</label>
+      <select id="pfCatSelect">
+        <option value="animation">🎞️ Animation</option>
+        <option value="voiceacting">🎙️ Voice Acting</option>
+        <option value="art">🎨 Art</option>
+      </select>
+      <div class="pf-upload" style="margin-top:16px;">
+        <label style="margin:0 0 6px;">Title</label>
+        <input type="text" id="pfTitle" placeholder="Piece title">
+        <label>Description</label>
+        <textarea id="pfDesc" placeholder="A short description"></textarea>
+        <label>Image (optional for all sections)</label>
+        <input type="file" id="pfImageFile" accept="image/*">
+        <label>Video (animation)</label>
+        <input type="file" id="pfVideoFile" accept="video/*">
+        <div class="field-hint" style="margin-top:-4px;">Keep clips short — a few seconds works best. Large videos may fail to save.</div>
+        <label>Audio (voice acting)</label>
+        <input type="file" id="pfAudioFile" accept="audio/*">
+        <button class="btn btn-cherry" style="margin-top:14px;" id="pfUploadBtn">Add to Section</button>
+      </div>
+    </div>
+    <div class="pf-grid" id="pfExisting"></div>
+  `;
+  renderPfExisting(document.getElementById('pfCatSelect').value);
+  document.getElementById('pfCatSelect').addEventListener('change', e=>renderPfExisting(e.target.value));
+  document.getElementById('pfUploadBtn').addEventListener('click', async ()=>{
+    const cat = document.getElementById('pfCatSelect').value;
+    const title = document.getElementById('pfTitle').value.trim();
+    const desc = document.getElementById('pfDesc').value.trim();
+    const imgFile = document.getElementById('pfImageFile').files[0];
+    const vidFile = document.getElementById('pfVideoFile').files[0];
+    const audFile = document.getElementById('pfAudioFile').files[0];
+    if(!title){ toast('Give it a title first'); return; }
+    if(vidFile && vidFile.size > 4.5*1024*1024){ toast('That video is too big to save (keep it under ~4.5MB) — try a shorter clip'); return; }
+    const id = uid();
+    const item = {id, category:cat, title, desc, image:null, video:null, audio:null, createdAt:Date.now()};
+    if(imgFile) item.image = await fileToCompressedDataUrl(imgFile, 900, 0.78);
+    if(vidFile) item.video = await fileToDataUrl(vidFile);
+    if(audFile) item.audio = await fileToDataUrl(audFile);
+    await storeSet('portfolio-item:'+id, JSON.stringify(item));
+    if(!pfIndex[cat]) pfIndex[cat]=[];
+    pfIndex[cat].push(id);
+    await savePortfolioIndex();
+    toast('Added to '+cat);
+    document.getElementById('pfTitle').value=''; document.getElementById('pfDesc').value='';
+    document.getElementById('pfImageFile').value=''; document.getElementById('pfVideoFile').value=''; document.getElementById('pfAudioFile').value='';
+    renderPfExisting(cat);
+  });
+}
+async function renderPfExisting(cat){
+  await loadPortfolioIndex();
+  const wrap = document.getElementById('pfExisting');
+  const ids = (pfIndex[cat]||[]).slice().reverse();
+  if(!ids.length){ wrap.innerHTML = '<div class="empty-state" style="grid-column:1/-1;">Nothing uploaded here yet.</div>'; return; }
+  const items = await Promise.all(ids.map(id=>storeGet('portfolio-item:'+id)));
+  wrap.innerHTML = items.filter(Boolean).map(raw=>{
+    const it = JSON.parse(raw);
+    const thumb = it.image ? `<img src="${it.image}">` : (it.video ? `<video src="${it.video}" muted></video>` : `<div class="ph">${it.audio?'🎙️':'🍰'}</div>`);
+    return `<div class="pf-item">
+      ${thumb}
+      <div class="info"><h5>${esc(it.title)}</h5><p>${esc(it.desc)}</p><button class="btn btn-danger btn-small pfDelBtn" data-id="${it.id}" data-cat="${cat}">Remove</button></div>
+    </div>`;
+  }).join('');
+  wrap.querySelectorAll('.pfDelBtn').forEach(b=>b.addEventListener('click', async ()=>{
+    pfIndex[b.dataset.cat] = pfIndex[b.dataset.cat].filter(x=>x!==b.dataset.id);
+    await savePortfolioIndex();
+    if(siteData.windowDisplay && siteData.windowDisplay.includes(b.dataset.id)){
+      siteData.windowDisplay = siteData.windowDisplay.filter(x=>x!==b.dataset.id);
+      await saveSiteData();
+    }
+    toast('Removed');
+    renderPfExisting(b.dataset.cat);
+  }));
+}
+
+function renderSheetsManager(el){
+  el.innerHTML = `<div class="card"><p class="small-note">Loading...</p></div>`;
+  (async ()=>{
+    const raw = await storeGet('pricesheet');
+    const data = raw ? JSON.parse(raw) : {tiers:[], modelSheets:[]};
+    el.innerHTML = `
+      <div class="card">
+        <h3 style="margin-top:0;">Price Sheet</h3>
+        <p class="sub" style="margin-bottom:12px;">Private reference for you only — clients never see this. To add options clients can actually pick from in the commission form, use <a href="#" id="jumpToGallery" style="color:var(--gold-light);text-decoration:underline;">Gallery Options in Settings</a> instead.</p>
+        <div id="tierRows"></div>
+        <button class="btn btn-gold btn-small" id="addTierBtn">+ Add Row</button>
+        <button class="btn btn-cherry" style="margin-left:8px;" id="saveTiersBtn">Save</button>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;">Model Sheets</h3>
+        <p class="sub" style="margin-bottom:12px;">Private reference images for you — not shown to clients or on the commission form.</p>
+        <input type="file" id="msFile" accept="image/*">
+        <button class="btn btn-cherry btn-small" style="margin-top:10px;" id="msUploadBtn">Upload</button>
+        <div class="pf-grid" style="margin-top:16px;" id="msGrid"></div>
+      </div>
+    `;
+    document.getElementById('jumpToGallery').addEventListener('click', e=>{
+      e.preventDefault();
+      document.querySelector('.dash-tab[data-tab="settings"]').click();
+      setTimeout(()=>{
+        document.getElementById('galleryManagerContainer')?.scrollIntoView({behavior:'smooth', block:'center'});
+      }, 60);
+    });
+    const rows = document.getElementById('tierRows');
+    function addRow(name,price){
+      const row = document.createElement('div');
+      row.className='priceline';
+      row.innerHTML = `<input type="text" class="tierName" placeholder="e.g. Sketch commission" value="${esc(name||'')}"><input type="text" class="tierPrice" placeholder="$25" value="${esc(price||'')}" style="max-width:100px;"><button class="btn btn-danger btn-small delTier">✕</button>`;
+      row.querySelector('.delTier').addEventListener('click', ()=>row.remove());
+      rows.appendChild(row);
+    }
+    (data.tiers||[]).forEach(t=>addRow(t.name,t.price));
+    if(!data.tiers || !data.tiers.length) addRow('','');
+    document.getElementById('addTierBtn').addEventListener('click', ()=>addRow('',''));
+    document.getElementById('saveTiersBtn').addEventListener('click', async ()=>{
+      const tiers = [...rows.querySelectorAll('.priceline')].map(r=>({name:r.querySelector('.tierName').value.trim(),price:r.querySelector('.tierPrice').value.trim()})).filter(t=>t.name);
+      data.tiers = tiers;
+      await storeSet('pricesheet', JSON.stringify(data));
+      toast('Price sheet saved');
+    });
+    function renderMs(){
+      document.getElementById('msGrid').innerHTML = (data.modelSheets||[]).map((img,i)=>`<div class="pf-item"><img src="${img}"><div class="info"><button class="btn btn-danger btn-small msDel" data-i="${i}">Remove</button></div></div>`).join('') || '<div class="empty-state" style="grid-column:1/-1;">No model sheets yet.</div>';
+      document.getElementById('msGrid').querySelectorAll('.msDel').forEach(b=>b.addEventListener('click', async ()=>{
+        data.modelSheets.splice(+b.dataset.i,1);
+        await storeSet('pricesheet', JSON.stringify(data));
+        renderMs();
+      }));
+    }
+    renderMs();
+    document.getElementById('msUploadBtn').addEventListener('click', async ()=>{
+      const f = document.getElementById('msFile').files[0];
+      if(!f){ toast('Choose an image first'); return; }
+      const dataUrl = await fileToCompressedDataUrl(f, 900, 0.78);
+      data.modelSheets = data.modelSheets||[];
+      data.modelSheets.push(dataUrl);
+      await storeSet('pricesheet', JSON.stringify(data));
+      document.getElementById('msFile').value='';
+      toast('Model sheet added');
+      renderMs();
+    });
+  })();
+}
+
+/* ================= ADDONS MANAGER ================= */
+function renderAddonsManager(el){
+  el.innerHTML = `
+    <div class="card">
+      <h3 style="margin-top:0;">Manage Add-Ons</h3>
+      <p class="sub" style="margin-bottom:12px;">Add-ons appear as optional extras clients can select alongside their order.</p>
+      <div id="addonList"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+        <input type="text" id="addonNameInput" placeholder="Add-on name" style="flex:1;min-width:140px;">
+        <input type="text" id="addonPriceInput" placeholder="$5" style="max-width:80px;">
+        <button class="btn btn-cherry btn-small" id="addAddonBtn">+ Add Add-On</button>
+      </div>
+      <div class="field-hint">Clients can select multiple add-ons. Price is optional — leave blank for TBD.</div>
+    </div>
+  `;
+  renderAddonList();
+  document.getElementById('addAddonBtn').addEventListener('click', async ()=>{
+    const name = document.getElementById('addonNameInput').value.trim();
+    const price = document.getElementById('addonPriceInput').value.trim();
+    if(!name){ toast('Enter a name for the add-on'); return; }
+    const addons = siteData.addons || [];
+    addons.push({id:uid(), name, price: price || null});
+    siteData.addons = addons;
+    await saveSiteData();
+    document.getElementById('addonNameInput').value = '';
+    document.getElementById('addonPriceInput').value = '';
+    toast('Add-on added!');
+    renderAddonList();
+  });
+}
+
+function renderAddonList(){
+  const container = document.getElementById('addonList');
+  const addons = siteData.addons || [];
+  if(!addons.length){
+    container.innerHTML = '<div class="field-hint" style="padding:8px 0;">No add-ons set up yet. Add one above!</div>';
+    return;
+  }
+  container.innerHTML = addons.map((a,i)=>`
+    <div style="display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid rgba(201,154,74,.1);">
+      <span style="flex:1;font-size:13px;color:var(--cream);">${esc(a.name)}${a.price ? ' <span style="color:var(--gold-light);">($'+a.price+')</span>' : ''}</span>
+      <button class="btn btn-danger btn-small delAddonBtn" data-id="${a.id}">✕</button>
+    </div>
+  `).join('');
+  container.querySelectorAll('.delAddonBtn').forEach(b=>b.addEventListener('click', async ()=>{
+    const addons = siteData.addons || [];
+    siteData.addons = addons.filter(a=>a.id!==b.dataset.id);
+    await saveSiteData();
+    toast('Add-on removed');
+    renderAddonList();
+  }));
+}
+
+/* ================= GALLERY MANAGER ================= */
+async function renderGalleryManager(el){
+  el.innerHTML = `
+    <div class="card">
+      <h3 style="margin-top:0;">Gallery Options</h3>
+      <p class="sub" style="margin-bottom:12px;">These appear as visual options for clients to choose from in the commission form. Drag to reorder, toggle visibility, and mark popular/recommended.</p>
+      <div id="galleryOptionsList" style="margin-top:12px;"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+        <input type="text" id="galleryNameInput" placeholder="Option name" style="flex:1;min-width:120px;">
+        <input type="text" id="galleryPriceInput" placeholder="$25" style="max-width:80px;">
+        <input type="text" id="galleryIconInput" placeholder="Icon (emoji)" style="max-width:60px;">
+        <input type="file" id="galleryImageInput" accept="image/*" style="max-width:120px;">
+        <button class="btn btn-cherry btn-small" id="addGalleryBtn">+ Add Option</button>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;align-items:center;">
+        <label class="checkline" style="margin:0;font-size:11px;"><input type="checkbox" id="galleryPopularChk"> ⭐ Popular</label>
+        <label class="checkline" style="margin:0;font-size:11px;"><input type="checkbox" id="galleryRecommendedChk"> ✨ Recommended</label>
+        <label class="checkline" style="margin:0;font-size:11px;"><input type="checkbox" id="galleryVisibleChk" checked> 👁️ Visible</label>
+        <div class="field-hint">These apply to the new option you're adding.</div>
+      </div>
+      <div class="field-hint">Drag options to reorder them. Toggle visibility to hide seasonal items without deleting them.</div>
+    </div>
+  `;
+  renderGalleryOptionsList('art');
+  document.getElementById('addGalleryBtn').addEventListener('click', async ()=>{
+    const cat = 'art';
+    const name = document.getElementById('galleryNameInput').value.trim();
+    const price = document.getElementById('galleryPriceInput').value.trim();
+    const icon = document.getElementById('galleryIconInput').value.trim() || '🎨';
+    const file = document.getElementById('galleryImageInput').files[0];
+    const popular = document.getElementById('galleryPopularChk').checked;
+    const recommended = document.getElementById('galleryRecommendedChk').checked;
+    const visible = document.getElementById('galleryVisibleChk').checked;
+    if(!name){ toast('Enter a name for the option'); return; }
+    let image = null;
+    if(file) image = await fileToCompressedDataUrl(file, 400, 0.7);
+    if(!siteData.gallery) siteData.gallery = {};
+    if(!siteData.gallery[cat]) siteData.gallery[cat] = [];
+    siteData.gallery[cat].push({id:uid(), name, price: price || null, icon, image, popular, recommended, visible});
+    await saveSiteData();
+    document.getElementById('galleryNameInput').value = '';
+    document.getElementById('galleryPriceInput').value = '';
+    document.getElementById('galleryIconInput').value = '';
+    document.getElementById('galleryImageInput').value = '';
+    document.getElementById('galleryPopularChk').checked = false;
+    document.getElementById('galleryRecommendedChk').checked = false;
+    document.getElementById('galleryVisibleChk').checked = true;
+    toast('Gallery option added!');
+    renderGalleryOptionsList(cat);
+  });
+}
+
+function renderGalleryOptionsList(cat){
+  const container = document.getElementById('galleryOptionsList');
+  const options = (siteData.gallery && siteData.gallery[cat]) || [];
+  if(!options.length){
+    container.innerHTML = '<div class="field-hint" style="padding:8px 0;">No options for this category yet.</div>';
+    return;
+  }
+  container.innerHTML = options.map((o,i)=>`
+    <div style="display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid rgba(201,154,74,.1);">
+      ${o.image ? `<img src="${o.image}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;">` : `<span style="font-size:24px;">${o.icon||'🎨'}</span>`}
+      <span style="flex:1;font-size:13px;color:var(--cream);">${esc(o.name)}${o.price ? ' <span style="color:var(--gold-light);">($'+o.price+')</span>' : ''}
+        ${o.popular ? ' <span style="font-size:9px;background:var(--gold);color:#3b2015;padding:1px 6px;border-radius:999px;">⭐</span>' : ''}
+        ${o.recommended ? ' <span style="font-size:9px;background:var(--cherry-bright);color:#fff;padding:1px 6px;border-radius:999px;">✨</span>' : ''}
+        ${o.visible === false ? ' <span style="font-size:9px;color:#8a6a4a;">🙈 hidden</span>' : ''}
+        ${o.soldOut ? ' <span style="font-size:9px;background:#8a6a4a;color:#fff;padding:1px 6px;border-radius:999px;">🚫 sold out</span>' : ''}
+      </span>
+      <button class="btn btn-small ${o.soldOut?'btn-danger':'btn-outline'} toggleSoldOutBtn" data-cat="${cat}" data-id="${o.id}" style="padding:4px 10px;font-size:10px;">${o.soldOut ? '🚫 Sold Out' : 'Mark Sold Out'}</button>
+      <button class="btn btn-small btn-gold toggleVisBtn" data-cat="${cat}" data-id="${o.id}" style="padding:4px 10px;font-size:10px;">${o.visible !== false ? '👁️' : '🙈'}</button>
+      <button class="btn btn-danger btn-small delGalleryBtn" data-cat="${cat}" data-id="${o.id}">✕</button>
+    </div>
+  `).join('');
+  container.querySelectorAll('.delGalleryBtn').forEach(b=>b.addEventListener('click', async ()=>{
+    const cat = b.dataset.cat;
+    const id = b.dataset.id;
+    if(siteData.gallery && siteData.gallery[cat]){
+      siteData.gallery[cat] = siteData.gallery[cat].filter(o=>o.id!==id);
+      await saveSiteData();
+      toast('Option removed');
+      renderGalleryOptionsList(cat);
+    }
+  }));
+  container.querySelectorAll('.toggleVisBtn').forEach(b=>b.addEventListener('click', async ()=>{
+    const cat = b.dataset.cat;
+    const id = b.dataset.id;
+    if(siteData.gallery && siteData.gallery[cat]){
+      const opt = siteData.gallery[cat].find(o=>o.id===id);
+      if(opt){
+        opt.visible = opt.visible === false ? true : false;
+        await saveSiteData();
+        toast(opt.visible ? 'Option is now visible 👁️' : 'Option is now hidden 🙈');
+        renderGalleryOptionsList(cat);
+      }
+    }
+  }));
+  container.querySelectorAll('.toggleSoldOutBtn').forEach(b=>b.addEventListener('click', async ()=>{
+    const cat = b.dataset.cat;
+    const id = b.dataset.id;
+    if(siteData.gallery && siteData.gallery[cat]){
+      const opt = siteData.gallery[cat].find(o=>o.id===id);
+      if(opt){
+        opt.soldOut = !opt.soldOut;
+        await saveSiteData();
+        toast(opt.soldOut ? '🚫 Marked sold out' : 'Marked available again');
+        renderGalleryOptionsList(cat);
+      }
+    }
+  }));
+}
+
+/* ================= SETTINGS MANAGER ================= */
+function renderSettingsManager(el){
+  const s = siteData.socials||{};
+  const about = siteData.about||{bio:'',images:[]};
+  const open = siteData.shop && siteData.shop.open !== false;
+  el.innerHTML = `
+    <div class="card">
+      <h3 style="margin-top:0;">Shop Sign & Slots</h3>
+      <label class="checkline" style="margin-top:0;"><input type="checkbox" id="shopOpenChk" ${open?'checked':''}> Shop is open for commissions</label>
+      <label>Estimated turnaround (shown to clients on the home page)</label>
+      <input type="text" id="turnaroundInput" placeholder="e.g. 2-3 weeks" value="${esc(siteData.turnaround||'')}">
+      <label>Slot limit (active, non-done orders before auto-closing to waitlist)</label>
+      <input type="text" id="slotLimitInput" placeholder="Leave blank for unlimited" value="${siteData.slotLimit?String(siteData.slotLimit):''}">
+      <div class="small-note">Once your active orders hit this number, the shop shows "Fully Booked" and sends new visitors to the waitlist automatically — you don't have to flip the sign yourself.</div>
+      <button class="btn btn-cherry btn-small" style="margin-top:10px;" id="saveShopExtrasBtn">Save Turnaround & Slot Limit</button>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;">Gallery Options</h3>
+      <div id="galleryManagerContainer"></div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;">🪟 Window Display</h3>
+      <p class="sub" style="margin-bottom:12px;">Pick exactly what shows in the "What's out today!" window on the home page — separate from what's posted to Animation, Voice Acting, or Art.</p>
+      <div id="windowManagerContainer"></div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;">Terms of Service</h3>
+      <textarea id="tosInput" style="min-height:170px;">${esc(siteData.tos||DEFAULT_TOS)}</textarea>
+      <div class="small-note">Clients see this on the first page of the commission form and have to agree before ordering. Change it anytime — updates apply to new orders right away.</div>
+      <button class="btn btn-cherry btn-small" style="margin-top:10px;" id="saveTosBtn">Save Terms of Service</button>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;">About Me</h3>
+      <label style="margin-top:0;">Bio</label>
+      <textarea id="bioInput">${esc(about.bio)}</textarea>
+      <label>Add a photo</label>
+      <input type="file" id="aboutPhotoFile" accept="image/*">
+      <button class="btn btn-gold btn-small" style="margin-top:8px;" id="addAboutPhotoBtn">Add Photo</button>
+      <div class="about-photos" id="aboutPhotoManage" style="margin-top:12px;"></div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;">Socials & Payment</h3>
+      <label style="margin-top:0;">Instagram URL</label><input type="url" id="socInsta" value="${esc(s.instagram||'')}">
+      <label>Twitter / X URL</label><input type="url" id="socTwitter" value="${esc(s.twitter||'')}">
+      <label>TikTok URL</label><input type="url" id="socTiktok" value="${esc(s.tiktok||'')}">
+      <label>Discord URL</label><input type="url" id="socDiscord" value="${esc(s.discord||'')}">
+      <label>CashApp $cashtag</label><input type="text" id="socCashtag" value="${esc(s.cashtag||'')}" placeholder="$cherrybaker">
+      <div class="small-note">Payments are manual via CashApp for now — a Stripe checkout can be wired in later once you have an account set up.</div>
+      <button class="btn btn-cherry" style="margin-top:14px;" id="saveSettingsBtn">Save Everything</button>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;">Goal Jar</h3>
+      <label class="checkline" style="margin-top:0;"><input type="checkbox" id="jarEnableChk" ${(siteData.jar&&siteData.jar.enabled)?'checked':''}> Show the goal jar on the home page</label>
+      <label>Jar title</label>
+      <input type="text" id="jarTitleInput" placeholder="e.g. New Tablet Fund" value="${esc((siteData.jar&&siteData.jar.title)||'')}">
+      <label>Goal amount</label>
+      <input type="text" id="jarGoalInput" placeholder="e.g. 500" value="${(siteData.jar&&siteData.jar.goal)?String(siteData.jar.goal):''}">
+      <label>Current amount</label>
+      <input type="text" id="jarCurrentInput" placeholder="e.g. 120" value="${(siteData.jar&&siteData.jar.current)?String(siteData.jar.current):''}">
+      <div class="small-note">Update "Current amount" any time to fill the jar — it overflows with a little celebration once it hits the goal. Stays hidden unless the checkbox above is on.</div>
+      <button class="btn btn-cherry btn-small" style="margin-top:10px;" id="saveJarBtn">Save Goal Jar</button>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;">Background Music</h3>
+      <input type="file" id="musicFile" accept="audio/*">
+      <div class="field-hint">Or paste a direct audio URL:</div>
+      <input type="url" id="musicUrl" placeholder="https://.../track.mp3">
+      <button class="btn btn-cherry btn-small" style="margin-top:10px;" id="saveMusicBtn">Set as Background Music</button>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;">Change Artist Password</h3>
+      <label style="margin-top:0;">New password</label>
+      <input type="password" id="newArtPass" placeholder="New password">
+      <button class="btn btn-gold btn-small" style="margin-top:10px;" id="savePassBtn">Update Password</button>
+    </div>
+    <div class="card" style="border-color:rgba(217,57,79,.35);">
+      <h3 style="margin-top:0;">🛠️ Debug Client Account</h3>
+      <div class="small-note">Artist-only — clients never see this. Logs you into a test client account (<code>debug_client</code> / <code>debug123</code>) so you can try out the client side of the site. Come back here and log back in as the artist when you're done.</div>
+      <button class="btn btn-gold btn-small" style="margin-top:10px;" id="debugClientBtn">Log In as Debug Client</button>
+      <button class="btn btn-outline btn-small" style="margin-top:10px;" id="debugSeedOrderBtn">🧪 Seed a Test Order</button>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0;">🎨 Receipt Style</h3>
+      <div class="small-note">Choose how order receipts look for you and your clients.</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;">
+        <label class="checkline"><input type="radio" name="receiptTheme" value="book" ${(!siteData.receiptTheme || siteData.receiptTheme==='book') ? 'checked':''}> 📖 Storybook <span style="opacity:.6;">(rose &amp; brown)</span></label>
+        <label class="checkline"><input type="radio" name="receiptTheme" value="paper" ${siteData.receiptTheme==='paper' ? 'checked':''}> 🧾 Classic Paper <span style="opacity:.6;">(cream &amp; gold)</span></label>
+      </div>
+      <button class="btn btn-cherry btn-small" style="margin-top:10px;" id="saveReceiptThemeBtn">Save Style</button>
+    </div>
+  `;
+  // Render gallery manager inside settings
+  renderGalleryManager(document.getElementById('galleryManagerContainer'));
+  renderWindowManager(document.getElementById('windowManagerContainer'));
+
+  function renderAboutPhotos(){
+    document.getElementById('aboutPhotoManage').innerHTML = (about.images||[]).map((img,i)=>`<div style="position:relative;"><img src="${img}"><button class="btn btn-danger btn-small aboutPhotoDel" data-i="${i}" style="position:absolute;top:4px;right:4px;">✕</button></div>`).join('');
+    document.getElementById('aboutPhotoManage').querySelectorAll('.aboutPhotoDel').forEach(b=>b.addEventListener('click', async ()=>{
+      about.images.splice(+b.dataset.i,1);
+      siteData.about = about;
+      await saveSiteData();
+      renderAboutPhotos();
+    }));
+  }
+  renderAboutPhotos();
+  document.getElementById('addAboutPhotoBtn').addEventListener('click', async ()=>{
+    const f = document.getElementById('aboutPhotoFile').files[0];
+    if(!f){ toast('Choose a photo first'); return; }
+    const dataUrl = await fileToCompressedDataUrl(f, 700, 0.75);
+    about.images = about.images||[];
+    if(about.images.length>=4){ toast('Remove one first — max 4 photos'); return; }
+    about.images.push(dataUrl);
+    siteData.about = about;
+    await saveSiteData();
+    document.getElementById('aboutPhotoFile').value='';
+    toast('Photo added');
+    renderAboutPhotos();
+  });
+  document.getElementById('shopOpenChk').addEventListener('change', async e=>{
+    siteData.shop = {open:e.target.checked};
+    await saveSiteData();
+    await refreshSlotStatus();
+    toast(e.target.checked?'Shop marked open':'Shop marked closed');
+  });
+  document.getElementById('saveJarBtn').addEventListener('click', async ()=>{
+    const goalNum = parseFloat(document.getElementById('jarGoalInput').value);
+    const curNum = parseFloat(document.getElementById('jarCurrentInput').value);
+    const enabled = document.getElementById('jarEnableChk').checked;
+    const goal = (isFinite(goalNum) && goalNum>0) ? goalNum : 0;
+    siteData.jar = {
+      enabled,
+      title: document.getElementById('jarTitleInput').value.trim(),
+      goal,
+      current: (isFinite(curNum) && curNum>0) ? curNum : 0
+    };
+    await saveSiteData();
+    renderGoalJar();
+    toast(enabled && !goal ? 'Jar saved — add a goal amount so it can fill up 🍒' : 'Goal jar saved 🍒');
+  });
+  document.getElementById('saveShopExtrasBtn').addEventListener('click', async ()=>{
+    siteData.turnaround = document.getElementById('turnaroundInput').value.trim();
+    const lim = parseInt(document.getElementById('slotLimitInput').value, 10);
+    siteData.slotLimit = (lim>0) ? lim : 0;
+    await saveSiteData();
+    await refreshSlotStatus();
+    toast('Turnaround & slot limit saved');
+  });
+  document.getElementById('saveTosBtn').addEventListener('click', async ()=>{
+    siteData.tos = document.getElementById('tosInput').value;
+    await saveSiteData();
+    toast('Terms of Service updated');
+  });
+  document.getElementById('saveSettingsBtn').addEventListener('click', async ()=>{
+    siteData.about = {bio:document.getElementById('bioInput').value.trim(), images: about.images||[]};
+    siteData.socials = {
+      instagram: document.getElementById('socInsta').value.trim(),
+      twitter: document.getElementById('socTwitter').value.trim(),
+      tiktok: document.getElementById('socTiktok').value.trim(),
+      discord: document.getElementById('socDiscord').value.trim(),
+      cashtag: document.getElementById('socCashtag').value.trim()
+    };
+    await saveSiteData();
+    toast('Settings saved 🍒');
+  });
+  document.getElementById('saveMusicBtn').addEventListener('click', async ()=>{
+    const f = document.getElementById('musicFile').files[0];
+    const url = document.getElementById('musicUrl').value.trim();
+    let track = null;
+    if(f) track = {name:f.name, src: await fileToDataUrl(f)};
+    else if(url) track = {name:url.split('/').pop(), src:url};
+    if(!track){ toast('Add a file or URL first'); return; }
+    await storeSet('music-track', JSON.stringify(track));
+    toast('Background music updated');
+    musicLoaded = false;
+    loadMusic();
+  });
+  document.getElementById('savePassBtn').addEventListener('click', async ()=>{
+    const np = document.getElementById('newArtPass').value;
+    if(!np || np.length<4){ toast('Password too short'); return; }
+    await storeSet('artist-auth', JSON.stringify({username:currentUser.username, password:np}));
+    toast('Password updated');
+    document.getElementById('newArtPass').value='';
+  });
+  document.getElementById('debugClientBtn').addEventListener('click', async ()=>{
+    const user = 'debug_client', pass = 'debug123', email = 'debug@test.local';
+    const existing = await storeGet('client-auth:'+user);
+    if(!existing){
+      await storeSet('client-auth:'+user, JSON.stringify({password:pass, email}));
+    }
+    currentUser = {role:'client', username:user, email, name:user};
+    toast('Logged in as debug client 🧪');
+    afterLogin();
+  });
+  document.getElementById('debugSeedOrderBtn').addEventListener('click', async ()=>{
+    await seedTestOrder();
+  });
+  document.getElementById('saveReceiptThemeBtn').addEventListener('click', async ()=>{
+    const checked = document.querySelector('input[name="receiptTheme"]:checked');
+    const val = checked ? checked.value : 'book';
+    siteData.receiptTheme = val;
+    await saveSiteData();
+    applyReceiptTheme();
+    toast('Receipt style saved 🍒');
+  });
+}
+
+/* ================= CHAT ================= */
+document.getElementById('chatBubbleBtn').addEventListener('click', ()=>{
+  const panel = document.getElementById('chatPanel');
+  panel.classList.toggle('active');
+  if(panel.classList.contains('active')) initChatPanel();
+});
+document.getElementById('chatCloseBtn').addEventListener('click', ()=>{
+  document.getElementById('chatPanel').classList.remove('active');
+  clearInterval(chatPollTimer);
+});
+function refreshChatButtonVisibility(){
+  const isCommissionView = document.getElementById('view-client').classList.contains('active') || document.getElementById('view-artist').classList.contains('active');
+  const btn = document.getElementById('chatBubbleBtn');
+  btn.style.display = isCommissionView ? 'flex' : 'none';
+  if(!isCommissionView){
+    document.getElementById('chatPanel').classList.remove('active');
+    clearInterval(chatPollTimer);
+  }
+}
+async function initChatPanel(){
+  if(!currentUser){
+    document.getElementById('chatBody').innerHTML = '<div class="chat-empty">Log in to start chatting 🍒</div>';
+    document.getElementById('chatOrderSelect').classList.add('hidden');
+    return;
+  }
+  const orders = await loadAllOrders();
+  if(currentUser.role==='artist'){
+    document.getElementById('chatTitle').textContent = 'Client Chats';
+    const sel = document.getElementById('chatOrderSelect');
+    sel.classList.remove('hidden');
+    sel.innerHTML = orders.map(o=>`<option value="${o.id}">${esc(o.clientName)} — ${o.category}</option>`).join('') || '<option>No orders yet</option>';
+    sel.onchange = ()=>openChatForOrder(sel.value);
+    if(orders.length) openChatForOrder(orders[0].id);
+    else document.getElementById('chatBody').innerHTML = '<div class="chat-empty">No orders to chat about yet.</div>';
+  } else {
+    const mine = orders.filter(o=>o.clientUsername===currentUser.username || o.clientEmail===currentUser.email);
+    document.getElementById('chatTitle').textContent = 'Chat with the Artist';
+    const sel = document.getElementById('chatOrderSelect');
+    if(mine.length>1){
+      sel.classList.remove('hidden');
+      sel.innerHTML = mine.map(o=>`<option value="${o.id}">${o.category} order</option>`).join('');
+      sel.onchange = ()=>openChatForOrder(sel.value);
+    } else sel.classList.add('hidden');
+    if(mine.length) openChatForOrder(mine[0].id);
+    else document.getElementById('chatBody').innerHTML = '<div class="chat-empty">Place a commission first to open a chat 🍒</div>';
+  }
+}
+function openChatForOrder(orderId){
+  activeChatOrderId = orderId;
+  document.getElementById('chatPanel').classList.add('active');
+  document.getElementById('chatOrderSelect').value = orderId;
+  loadChatMessages();
+  clearInterval(chatPollTimer);
+  chatPollTimer = setInterval(loadChatMessages, 3000);
+}
+async function loadChatMessages(){
+  if(!activeChatOrderId) return;
+  const raw = await storeGet('chat:'+activeChatOrderId);
+  const msgs = raw ? JSON.parse(raw) : [];
+  const body = document.getElementById('chatBody');
+  const wasAtBottom = body.scrollTop + body.clientHeight >= body.scrollHeight - 30;
+  body.innerHTML = msgs.length ? msgs.map(m=>{
+    const mine = (currentUser && m.from===currentUser.role);
+    return `<div class="chat-msg ${mine?'me':'them'}"><span class="who">${m.from==='artist'?'Artist':'Client'}</span>${esc(m.text)}</div>`;
+  }).join('') : '<div class="chat-empty">Say hello! 🍒</div>';
+  if(wasAtBottom) body.scrollTop = body.scrollHeight;
+}
+document.getElementById('chatSendBtn').addEventListener('click', sendChat);
+document.getElementById('chatInput').addEventListener('keydown', e=>{ if(e.key==='Enter') sendChat(); });
+async function sendChat(){
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if(!text || !activeChatOrderId || !currentUser) return;
+  const raw = await storeGet('chat:'+activeChatOrderId);
+  const msgs = raw ? JSON.parse(raw) : [];
+  msgs.push({from:currentUser.role, text, time:Date.now()});
+  await storeSet('chat:'+activeChatOrderId, JSON.stringify(msgs));
+  input.value='';
+  loadChatMessages();
+}
+
+/* ================= FAQ ================= */
+document.getElementById('faqToggleBtn').addEventListener('click', e=>{
+  e.preventDefault();
+  document.getElementById('faqOverlay').classList.add('active');
+});
+
+// FAQ accordion
+document.getElementById('faqContainer').addEventListener('click', e=>{
+  const q = e.target.closest('.faq-q');
+  if(!q) return;
+  const a = q.nextElementSibling;
+  const toggle = q.querySelector('.faq-toggle');
+  a.classList.toggle('open');
+  toggle.classList.toggle('open');
+});
+
+/* ================= MUSIC PLAYER ================= */
+async function loadMusic(){
+  const raw = await storeGet('music-track');
+  const audio = document.getElementById('mpAudio');
+  if(raw){
+    const track = JSON.parse(raw);
+    audio.src = track.src;
+    document.getElementById('mpTrack').textContent = track.name || 'Background track';
+  } else {
+    document.getElementById('mpTrack').textContent = 'No track set';
+  }
+  musicLoaded = true;
+}
+document.getElementById('mpPlayBtn').addEventListener('click', async ()=>{
+  const audio = document.getElementById('mpAudio');
+  if(!musicLoaded) await loadMusic();
+  if(!audio.src){ toast('No background track set yet — add one in Artist Settings 🍒'); return; }
+  if(audio.paused){ audio.play().catch(()=>toast('Tap play again to allow audio')); document.getElementById('mpPlayBtn').textContent='⏸'; }
+  else { audio.pause(); document.getElementById('mpPlayBtn').textContent='▶'; }
+});
+document.getElementById('mpVolume').addEventListener('input', e=>{
+  document.getElementById('mpAudio').volume = e.target.value/100;
+});
+document.getElementById('mpAudio').volume = 0.5;
+
+/* ================= INIT ================= */
+(async function init(){
+  await loadSiteData();
+  applyReceiptTheme();
+  await loadPortfolioIndex();
+  renderWindowShowcase();
+  renderGoalJar();
+  await renderHomeReviews();
+  loadMusic();
+  refreshChatButtonVisibility();
+})();
+</script>
+</body>
+</html>
