@@ -208,6 +208,11 @@ main{max-width:1180px;margin:0 auto;padding:34px 22px 120px;}
 .loyalty-footer{display:flex;flex-direction:column;gap:4px;font-size:12.5px;}
 .loyalty-earned{color:var(--cherry);font-weight:700;}
 .loyalty-total{opacity:.75;}
+.loyalty-card-wrap{position:relative;}
+.loyalty-anim-out{position:absolute;top:0;left:0;width:100%;z-index:2;animation:loyaltySlideOut .7s ease forwards;}
+.loyalty-anim-in{animation:loyaltySlideIn .7s ease .3s both;}
+@keyframes loyaltySlideOut{from{transform:translateX(0) rotate(0deg);opacity:1;}to{transform:translateX(-130%) rotate(-6deg);opacity:0;}}
+@keyframes loyaltySlideIn{from{transform:translateX(110%);opacity:0;}to{transform:translateX(0);opacity:1;}}
 .plate-card h3{margin:0 0 6px;font-size:16px;color:var(--cream);}
 .plate-card p{margin:0;font-size:12.5px;color:var(--cream-dim);line-height:1.5;max-width:220px;}
 .empty-state{
@@ -1383,6 +1388,7 @@ let refImagesData = [];
 let activeChatOrderId = null;
 let chatPollTimer = null;
 let musicLoaded = false;
+let loyaltyPrevDone = {};
 let bookLastPage = 1;
 let slotsFull = false;
 let selectedGalleryOption = null;
@@ -2727,13 +2733,15 @@ async function renderLoyaltyCard(){
   const justEarned = doneCount>0 && pos%3===0;
   const totalRewards = Math.floor(doneCount/3);
   const untilNext = pos%3===0 ? 3 : 3-(pos%3);
-  let slotsHtml = '';
-  for(let i=0;i<12;i++){
-    const filled = i < pos;
-    const isRewardSlot = (i+1)%3===0;
-    slotsHtml += `<span class="loyalty-slot ${filled?'filled':''} ${isRewardSlot?'reward':''}">${filled ? (isRewardSlot?'★':'●') : (isRewardSlot?'☆':'○')}</span>`;
-  }
-  container.innerHTML = `
+
+  function buildCard(fillCount, earnedFlag){
+    let slotsHtml = '';
+    for(let i=0;i<12;i++){
+      const filled = i < fillCount;
+      const isRewardSlot = (i+1)%3===0;
+      slotsHtml += `<span class="loyalty-slot ${filled?'filled':''} ${isRewardSlot?'reward':''}">${filled ? (isRewardSlot?'★':'●') : (isRewardSlot?'☆':'○')}</span>`;
+    }
+    return `
     <div class="loyalty-card-inner">
       <div class="loyalty-card-head">
         <span class="loyalty-title">📚 Loyalty Checkout Card</span>
@@ -2743,12 +2751,27 @@ async function renderLoyaltyCard(){
       <div class="loyalty-footer">
         ${doneCount===0
           ? `<span>Complete your first order to start punching your card!</span>`
-          : justEarned
+          : earnedFlag
             ? `<span class="loyalty-earned">🎉 Reward unlocked! Mention it to the artist on your next order 💌</span>`
             : `<span>${untilNext} more completed order${untilNext===1?'':'s'} until your next reward</span>`}
         ${totalRewards>0 ? `<span class="loyalty-total">🎁 ${totalRewards} reward${totalRewards===1?'':'s'} earned total</span>` : ''}
       </div>
     </div>`;
+  }
+
+  const key = currentUser.username || currentUser.email;
+  const prevDone = loyaltyPrevDone[key];
+  const justCompletedCard = prevDone != null && doneCount>0 && Math.floor(prevDone/12) < Math.floor(doneCount/12);
+  loyaltyPrevDone[key] = doneCount;
+
+  if(justCompletedCard){
+    container.innerHTML = `<div class="loyalty-card-wrap">
+      <div class="loyalty-anim-out">${buildCard(12, true)}</div>
+      <div class="loyalty-anim-in">${buildCard(pos, justEarned)}</div>
+    </div>`;
+  } else {
+    container.innerHTML = buildCard(pos, justEarned);
+  }
 }
 
 async function renderClientDashboard(){
