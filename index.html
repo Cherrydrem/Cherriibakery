@@ -871,6 +871,19 @@ footer .footer-links a:hover{text-decoration:underline;}
 }
 .subscribe-box .grow{flex:1;min-width:200px;}
 
+/* reusable "not ready yet" cover for unfinished features */
+.not-ready-wrap{position:relative;overflow:hidden;}
+.not-ready-wrap>*{opacity:.55;pointer-events:none;user-select:none;}
+.not-ready-ribbon{
+  position:absolute;top:12px;right:-34px;z-index:5;pointer-events:none;
+  background:var(--cherry,#d9394f);color:#fff;font-family:'Quicksand',sans-serif;font-weight:700;
+  font-size:10.5px;padding:4px 36px;transform:rotate(45deg);white-space:nowrap;
+  box-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+.not-ready-ribbon.compact{
+  top:2px;right:-38px;font-size:8px;padding:2px 34px;
+}
+
 .toast{
   position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:300;
   background:var(--brown-800);border:1px solid var(--gold);color:var(--cream);
@@ -1023,12 +1036,15 @@ footer .footer-links a:hover{text-decoration:underline;}
       </div>
       <div class="about-bio" id="aboutBio">This baker hasn't written a bio yet.</div>
     </div>
-    <div class="subscribe-box">
-      <div class="grow">
-        <label style="margin:0 0 6px;">Get live order updates by email</label>
-        <input type="email" id="subEmail" placeholder="name@email.com">
+    <div class="not-ready-wrap">
+      <div class="subscribe-box">
+        <div class="grow">
+          <label style="margin:0 0 6px;">Get live order updates by email</label>
+          <input type="email" id="subEmail" placeholder="name@email.com" disabled>
+        </div>
+        <button class="btn btn-cherry btn-small" id="subBtn" disabled>Notify Me</button>
       </div>
-      <button class="btn btn-cherry btn-small" id="subBtn">Notify Me</button>
+      <div class="not-ready-ribbon">Not ready yet!</div>
     </div>
   </section>
 
@@ -1300,7 +1316,10 @@ footer .footer-links a:hover{text-decoration:underline;}
             <div style="flex:2;min-width:280px;">
               <label style="margin-top:0;">Review your order</label>
               <div class="card" id="reviewCard"></div>
-              <label class="checkline"><input type="checkbox" id="ordSubscribe" checked> this don't work for right now</label>
+              <div class="not-ready-wrap" style="display:inline-block;padding:6px 34px 6px 0;">
+                <label class="checkline"><input type="checkbox" id="ordSubscribe" disabled> Get live order updates by email</label>
+                <div class="not-ready-ribbon compact">Not ready yet!</div>
+              </div>
               <div class="form-msg hidden" id="bookMsg"></div>
               <div class="book-nav"><button class="btn btn-outline btn-small" id="toPage3b">← Back</button><button class="btn btn-cherry" id="submitOrder">🍒 Place Order</button></div>
             </div>
@@ -1380,6 +1399,48 @@ footer .footer-links a:hover{text-decoration:underline;}
 <script>
 /* ================= STATE ================= */
 let currentUser = null;
+const SESSION_KEY = 'cb-session';
+function setCurrentUser(user){
+  currentUser = user;
+  try{ localStorage.setItem(SESSION_KEY, JSON.stringify(user)); }catch(e){}
+}
+function clearCurrentUser(){
+  currentUser = null;
+  try{ localStorage.removeItem(SESSION_KEY); }catch(e){}
+}
+function restoreSession(){
+  try{
+    const raw = localStorage.getItem(SESSION_KEY);
+    if(raw) currentUser = JSON.parse(raw);
+  }catch(e){}
+}
+const DEBUG_RETURN_KEY = 'cb-debug-return';
+let debugReturnUser = null;
+function setDebugReturnUser(user){
+  debugReturnUser = user;
+  try{ localStorage.setItem(DEBUG_RETURN_KEY, JSON.stringify(user)); }catch(e){}
+}
+function clearDebugReturnUser(){
+  debugReturnUser = null;
+  try{ localStorage.removeItem(DEBUG_RETURN_KEY); }catch(e){}
+  const bar = document.getElementById('debugReturnBar');
+  if(bar) bar.remove();
+}
+function showDebugReturnBar(){
+  if(document.getElementById('debugReturnBar')) return;
+  const bar = document.createElement('div');
+  bar.id = 'debugReturnBar';
+  bar.style.cssText = 'position:fixed;bottom:16px;right:16px;z-index:9999;background:var(--cherry,#d9394f);color:#fff;padding:10px 16px;border-radius:999px;font-family:Quicksand,sans-serif;font-weight:700;font-size:13px;box-shadow:0 4px 16px rgba(0,0,0,.25);cursor:pointer;display:flex;align-items:center;gap:6px;';
+  bar.innerHTML = '🧪 Debug Mode — Back to Artist Account';
+  bar.addEventListener('click', ()=>{
+    if(!debugReturnUser) return;
+    setCurrentUser(debugReturnUser);
+    clearDebugReturnUser();
+    afterLogin();
+    toast('Back in the Kitchen 🍒');
+  });
+  document.body.appendChild(bar);
+}
 let siteData = { about:{bio:'',images:[]}, socials:{}, shop:{open:true} };
 let pfIndex = {animation:[], voiceacting:[], art:[]};
 let ordersCache = {};
@@ -1564,7 +1625,7 @@ async function uploadToBucket(file, folder){
     if(error) throw error;
     const { data } = sb.storage.from(STORAGE_BUCKET).getPublicUrl(path);
     return data && data.publicUrl ? data.publicUrl : null;
-  }catch(e){ return null; }
+  }catch(e){ console.error('Supabase Storage upload failed:', e && e.message ? e.message : e); return null; }
 }
 /* Smart upload: video/audio/large files go to Supabase Storage (fast, no size worries).
    Small images fall back to a compressed inline data URL if Storage isn't set up yet. */
@@ -1689,6 +1750,11 @@ document.getElementById('showLogin').addEventListener('click', e=>{
 });
 
 /* ================= AUTH ================= */
+async function hashPassword(pass){
+  const enc = new TextEncoder().encode(pass);
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
 function msgBox(id, text, ok){
   const el = document.getElementById(id);
   el.textContent = text; el.classList.remove('hidden','err','ok');
@@ -1701,8 +1767,8 @@ document.getElementById('cliSignSubmit').addEventListener('click', async ()=>{
   if(!user || !email || !pass){ msgBox('cliSignMsg','Fill in every field to keep your account safe.'); return; }
   const existing = await storeGet('client-auth:'+user);
   if(existing){ msgBox('cliSignMsg','That username is taken — try another.'); return; }
-  await storeSet('client-auth:'+user, JSON.stringify({password:pass, email}));
-  currentUser = {role:'client', username:user, email, name:user};
+  await storeSet('client-auth:'+user, JSON.stringify({password: await hashPassword(pass), email}));
+  setCurrentUser({role:'client', username:user, email, name:user});
   msgBox('cliSignMsg','Account created!', true);
   setTimeout(()=>{ closeOverlay('loginOverlay'); afterLogin(); }, 400);
 });
@@ -1712,8 +1778,9 @@ document.getElementById('cliLoginSubmit').addEventListener('click', async ()=>{
   const raw = await storeGet('client-auth:'+user);
   if(!raw){ msgBox('cliLoginMsg','No account with that username yet.'); return; }
   const data = JSON.parse(raw);
-  if(data.password !== pass){ msgBox('cliLoginMsg','Wrong password — try again.'); return; }
+  if(data.password !== await hashPassword(pass)){ msgBox('cliLoginMsg','Wrong password — try again.'); return; }
   currentUser = {role:'client', username:user, email:data.email, name:user};
+  setCurrentUser(currentUser);
   msgBox('cliLoginMsg','Welcome back!', true);
   setTimeout(()=>{ closeOverlay('loginOverlay'); afterLogin(); }, 300);
 });
@@ -1722,13 +1789,14 @@ document.getElementById('artLoginSubmit').addEventListener('click', async ()=>{
   const pass = document.getElementById('artLoginPass').value;
   let raw = await storeGet('artist-auth');
   if(!raw || JSON.parse(raw).username === 'artist'){
-    const seed = {username:'cherriimilk', password:'14th08'};
+    const seed = {username:'cherriimilk', password: await hashPassword('14th08')};
     await storeSet('artist-auth', JSON.stringify(seed));
     raw = JSON.stringify(seed);
   }
   const data = JSON.parse(raw);
-  if(user !== data.username || pass !== data.password){ msgBox('artLoginMsg','Incorrect username or password.'); return; }
+  if(user !== data.username || await hashPassword(pass) !== data.password){ msgBox('artLoginMsg','Incorrect username or password.'); return; }
   currentUser = {role:'artist', username:user, name:'Artist'};
+  setCurrentUser(currentUser);
   msgBox('artLoginMsg','Welcome back!', true);
   setTimeout(()=>{ closeOverlay('loginOverlay'); afterLogin(); }, 300);
 });
@@ -1737,10 +1805,10 @@ function afterLogin(){
   showView(currentUser.role==='artist' ? 'artist' : 'client');
   refreshChatButtonVisibility();
 }
-document.getElementById('clientLogoutBtn').addEventListener('click', ()=>{ currentUser=null; document.getElementById('loginNavBtn').textContent='Log In'; showView('home'); toast('Logged out'); });
+document.getElementById('clientLogoutBtn').addEventListener('click', ()=>{ clearCurrentUser(); clearDebugReturnUser(); document.getElementById('loginNavBtn').textContent='Log In'; showView('home'); toast('Logged out'); });
 document.getElementById('clientOrderSearch').addEventListener('input', ()=> renderClientDashboard());
 document.getElementById('clientStatusFilter').addEventListener('change', ()=> renderClientDashboard());
-document.getElementById('artistLogoutBtn').addEventListener('click', ()=>{ currentUser=null; document.getElementById('loginNavBtn').textContent='Log In'; showView('home'); toast('Logged out'); });
+document.getElementById('artistLogoutBtn').addEventListener('click', ()=>{ clearCurrentUser(); clearDebugReturnUser(); document.getElementById('loginNavBtn').textContent='Log In'; showView('home'); toast('Logged out'); });
 
 /* ================= SITE DATA (about/socials/shop) ================= */
 async function loadSiteData(){
@@ -1829,10 +1897,25 @@ function renderAbout(){
   photosEl.innerHTML = imgs.length ? imgs.map(i=>`<img src="${i}">`).join('') : '';
   const socialsEl = document.getElementById('aboutSocials');
   const s = siteData.socials || {};
-  const items = [
-    ['instagram','Instagram'], ['twitter','Twitter / X'], ['tiktok','TikTok'], ['discord','Discord']
+  const linkItems = [
+    ['instagram','Instagram'], ['twitter','Twitter / X'], ['tiktok','TikTok']
   ];
-  socialsEl.innerHTML = items.filter(([k])=>s[k]).map(([k,label])=>`<a class="social-chip" href="${esc(s[k])}" target="_blank" rel="noopener">${label}</a>`).join('') || '<p class="small-note">No socials added yet — add them in Artist Settings.</p>';
+  let html = linkItems.filter(([k])=>s[k]).map(([k,label])=>`<a class="social-chip" href="${esc(s[k])}" target="_blank" rel="noopener">${label}</a>`).join('');
+  if(s.discord){
+    html += `<span class="social-chip social-chip-copy" id="discordChip" title="Click to copy" style="cursor:pointer;">Discord: ${esc(s.discord)} 📋</span>`;
+  }
+  socialsEl.innerHTML = html || '<p class="small-note">No socials added yet — add them in Artist Settings.</p>';
+  const discordChip = document.getElementById('discordChip');
+  if(discordChip){
+    discordChip.addEventListener('click', async ()=>{
+      try{
+        await navigator.clipboard.writeText(s.discord);
+        toast('Discord username copied 📋');
+      }catch(e){
+        toast('Copy failed — long-press or select the text manually');
+      }
+    });
+  }
 }
 
 document.getElementById('subBtn').addEventListener('click', async ()=>{
@@ -3318,11 +3401,16 @@ function renderPortfolioManager(el){
     if(imgFile) item.image = await uploadMedia(imgFile, {folder:'portfolio', maxW:900, quality:0.78});
     if(vidFile) item.video = await uploadMedia(vidFile, {folder:'portfolio'});
     if(audFile) item.audio = await uploadMedia(audFile, {folder:'portfolio'});
-    await storeSet('portfolio-item:'+id, JSON.stringify(item));
+    const saved = await storeSet('portfolio-item:'+id, JSON.stringify(item));
+    if(!saved){ toast('Save failed — try again'); return; }
+    if((imgFile && !item.image) || (vidFile && !item.video) || (audFile && !item.audio)){
+      toast('Added, but one file failed to upload — check your Supabase Storage setup');
+    } else {
+      toast('Added to '+cat);
+    }
     if(!pfIndex[cat]) pfIndex[cat]=[];
     pfIndex[cat].push(id);
     await savePortfolioIndex();
-    toast('Added to '+cat);
     document.getElementById('pfTitle').value=''; document.getElementById('pfDesc').value='';
     document.getElementById('pfImageFile').value=''; document.getElementById('pfVideoFile').value=''; document.getElementById('pfAudioFile').value='';
     renderPfExisting(cat);
@@ -3631,7 +3719,7 @@ function renderSettingsManager(el){
       <label style="margin-top:0;">Instagram URL</label><input type="url" id="socInsta" value="${esc(s.instagram||'')}">
       <label>Twitter / X URL</label><input type="url" id="socTwitter" value="${esc(s.twitter||'')}">
       <label>TikTok URL</label><input type="url" id="socTiktok" value="${esc(s.tiktok||'')}">
-      <label>Discord URL</label><input type="url" id="socDiscord" value="${esc(s.discord||'')}">
+      <label>Discord username</label><input type="text" id="socDiscord" value="${esc(s.discord||'')}" placeholder="cherriimilk">
       <label>CashApp $cashtag</label><input type="text" id="socCashtag" value="${esc(s.cashtag||'')}" placeholder="$cherrybaker">
       <div class="small-note">Payments are manual via CashApp for now — a Stripe checkout can be wired in later once you have an account set up.</div>
       <button class="btn btn-cherry" style="margin-top:14px;" id="saveSettingsBtn">Save Everything</button>
@@ -3754,10 +3842,15 @@ function renderSettingsManager(el){
     const f = document.getElementById('musicFile').files[0];
     const url = document.getElementById('musicUrl').value.trim();
     let track = null;
-    if(f) track = {name:f.name, src: await uploadMedia(f, {folder:'music'})};
+    if(f){
+      const src = await uploadMedia(f, {folder:'music'});
+      if(!src){ toast('Upload failed — try a smaller file or check your connection'); return; }
+      track = {name:f.name, src};
+    }
     else if(url) track = {name:url.split('/').pop(), src:url};
     if(!track){ toast('Add a file or URL first'); return; }
-    await storeSet('music-track', JSON.stringify(track));
+    const saved = await storeSet('music-track', JSON.stringify(track));
+    if(!saved){ toast('Save failed — the file may be too large. Try a shorter clip or a direct URL instead'); return; }
     toast('Background music updated');
     musicLoaded = false;
     loadMusic();
@@ -3765,7 +3858,7 @@ function renderSettingsManager(el){
   document.getElementById('savePassBtn').addEventListener('click', async ()=>{
     const np = document.getElementById('newArtPass').value;
     if(!np || np.length<4){ toast('Password too short'); return; }
-    await storeSet('artist-auth', JSON.stringify({username:currentUser.username, password:np}));
+    await storeSet('artist-auth', JSON.stringify({username:currentUser.username, password: await hashPassword(np)}));
     toast('Password updated');
     document.getElementById('newArtPass').value='';
   });
@@ -3773,11 +3866,13 @@ function renderSettingsManager(el){
     const user = 'debug_client', pass = 'debug123', email = 'debug@test.local';
     const existing = await storeGet('client-auth:'+user);
     if(!existing){
-      await storeSet('client-auth:'+user, JSON.stringify({password:pass, email}));
+      await storeSet('client-auth:'+user, JSON.stringify({password: await hashPassword(pass), email}));
     }
-    currentUser = {role:'client', username:user, email, name:user};
+    if(currentUser && currentUser.role==='artist'){ setDebugReturnUser(currentUser); }
+    setCurrentUser({role:'client', username:user, email, name:user});
     toast('Logged in as debug client 🧪');
     afterLogin();
+    showDebugReturnBar();
   });
   document.getElementById('debugSeedOrderBtn').addEventListener('click', async ()=>{
     await seedTestOrder();
@@ -3923,6 +4018,17 @@ document.getElementById('mpAudio').volume = 0.5;
   renderGoalJar();
   await renderHomeReviews();
   loadMusic();
+  restoreSession();
+  if(currentUser){
+    document.getElementById('loginNavBtn').textContent = currentUser.role==='artist' ? '🍒 Kitchen' : '🍓 My Account';
+  }
+  try{
+    const draw = localStorage.getItem(DEBUG_RETURN_KEY);
+    if(draw && currentUser && currentUser.role==='client'){
+      debugReturnUser = JSON.parse(draw);
+      showDebugReturnBar();
+    }
+  }catch(e){}
   refreshChatButtonVisibility();
 })();
 </script>
