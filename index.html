@@ -872,17 +872,19 @@ footer .footer-links a:hover{text-decoration:underline;}
 .subscribe-box .grow{flex:1;min-width:200px;}
 
 /* reusable "not ready yet" cover for unfinished features */
-.not-ready-wrap{position:relative;overflow:hidden;}
-.not-ready-wrap>*{opacity:.55;pointer-events:none;user-select:none;}
+.not-ready-wrap{position:relative;}
+.not-ready-wrap>*:not(.not-ready-ribbon){opacity:.55;pointer-events:none;user-select:none;}
 .not-ready-ribbon{
-  position:absolute;top:12px;right:-34px;z-index:5;pointer-events:none;
+  position:absolute;top:0;right:0;z-index:5;pointer-events:none;
   background:var(--cherry,#d9394f);color:#fff;font-family:'Quicksand',sans-serif;font-weight:700;
-  font-size:10.5px;padding:4px 36px;transform:rotate(45deg);white-space:nowrap;
+  font-size:10.5px;padding:5px 14px;white-space:nowrap;
+  border-radius:0 var(--radius) 0 10px;
   box-shadow:0 2px 8px rgba(0,0,0,.3);
 }
 .not-ready-ribbon.compact{
-  top:2px;right:-38px;font-size:8px;padding:2px 34px;
+  top:-2px;right:-2px;font-size:8px;padding:3px 10px;border-radius:0 10px 0 8px;
 }
+
 .toast{
   position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:300;
   background:var(--brown-800);border:1px solid var(--gold);color:var(--cream);
